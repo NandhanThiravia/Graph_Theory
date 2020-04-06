@@ -30,6 +30,8 @@ public class Graph {
     private AdjacencyList[] adjacencyArray;
     private int numberOfVertices;
 
+    boolean visited[];
+
     @SuppressWarnings("unused")
     private Graph() {
     }
@@ -41,6 +43,8 @@ public class Graph {
         for (int index = 0; index < this.numberOfVertices; ++index) {
             this.adjacencyArray[index] = new AdjacencyList();
         }
+
+        visited = new boolean[this.numberOfVertices];
     }
 
     public void addEdge(int fromVertex, int toVertex) {
@@ -80,10 +84,13 @@ public class Graph {
             return;
         }
 
-        System.out.println("\n\nBreadth - First Traversal");
+        System.out.println("Breadth - First Traversal");
         System.out.println("--------------------------");
 
-        boolean visited[] = new boolean[numberOfVertices];
+        for (int index = 0; index < numberOfVertices; ++index) {
+            visited[index] = false;
+        }
+
         Queue<Integer> queue = new LinkedList<Integer>();
 
         if (!visited[0]) {
@@ -115,10 +122,13 @@ public class Graph {
             return;
         }
 
-        System.out.println("\n\nDepth - First Traversal");
+        System.out.println("Depth - First Traversal");
         System.out.println("--------------------------");
 
-        boolean visited[] = new boolean[numberOfVertices];
+        for (int index = 0; index < numberOfVertices; ++index) {
+            visited[index] = false;
+        }
+
         Stack<Integer> stack = new Stack<Integer>();
 
         if (!visited[0]) {
@@ -138,6 +148,71 @@ public class Graph {
                 }
                 iterator = iterator.link;
             }
+        }
+    }
+
+    private boolean hasNextNeighbour(int data) {
+        Node iterator = adjacencyArray[data].head;
+        if (iterator == null) {
+            // System.out.println("No children");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasNonVisitedNeighbour(int data) {
+        Node iterator = adjacencyArray[data].head;
+        while (iterator != null) {
+            if (!visited[iterator.data]) {
+                // System.out.println("Non visited node present");
+                return true;
+            }
+            iterator = iterator.link;
+        }
+        return false;
+    }
+
+    private int nextNonVisitedNeighbour(int data) {
+        Node iterator = adjacencyArray[data].head;
+        while (iterator != null) {
+            if (!visited[iterator.data]) {
+                return iterator.data;
+            }
+            iterator = iterator.link;
+        }
+        return -1;
+    }
+
+    public void topologicalSort() {
+        for (int index = 0; index < numberOfVertices; ++index) {
+            visited[index] = false;
+        }
+
+        Stack<Integer> output = new Stack<Integer>();
+        Stack<Integer> stack = new Stack<Integer>();
+
+        for (int nodeInSequence = 0; nodeInSequence < numberOfVertices; ++nodeInSequence) {
+            if (!visited[nodeInSequence]) {
+                visited[nodeInSequence] = true;
+                stack.push(nodeInSequence);
+
+                while (!stack.isEmpty()) {
+                    int node = stack.pop();
+
+                    while (hasNonVisitedNeighbour(node)) {
+                        stack.push(node);
+                        node = nextNonVisitedNeighbour(node);
+                        visited[node] = true;
+                    }
+                    output.push(node);
+                }
+            }
+        }
+
+        System.out.println("Topological Sort");
+        System.out.println("-----------------");
+        while (!output.isEmpty()) {
+            System.out.println(output.pop());
         }
     }
 }
