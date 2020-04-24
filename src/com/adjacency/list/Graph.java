@@ -93,23 +93,26 @@ public class Graph {
 
         Queue<Integer> queue = new LinkedList<Integer>();
 
-        if (!visited[0]) {
-            visited[0] = true;
-            queue.add(0);
-        }
+        for (int index = 0; index < numberOfVertices; ++index) {
+            if (!visited[index]) {
+                visited[index] = true;
+                queue.add(index);
 
-        while (!queue.isEmpty()) {
-            int data = queue.poll();
-            System.out.println(data);
+                while (!queue.isEmpty()) {
+                    int data = queue.poll();
+                    System.out.println(data);
 
-            Node iterator = adjacencyArray[data].head;
-            while (iterator != null) {
-                if (!visited[iterator.data]) {
-                    visited[iterator.data] = true;
-                    queue.add(iterator.data);
+                    Node iterator = adjacencyArray[data].head;
+                    while (iterator != null) {
+                        if (!visited[iterator.data]) {
+                            visited[iterator.data] = true;
+                            queue.add(iterator.data);
+                        }
+                        iterator = iterator.link;
+                    }
                 }
-                iterator = iterator.link;
             }
+
         }
     }
 
