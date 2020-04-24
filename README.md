@@ -5,3 +5,4 @@ My learning about Graph Theory Data Structures
 3. Breadth First Traversal (Non Recursive)
 4. Topological Sorting (Non Reursive)
 5. Word Ladder Problem Solved - Shortest Chain Length to reach a target word given a start word and a list of words.
+6. Code to find number of Disconnected Graphs (also called as Islands in Graph) in the Input Graph data.

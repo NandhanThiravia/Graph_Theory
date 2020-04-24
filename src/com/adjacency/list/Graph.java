@@ -84,6 +84,7 @@ public class Graph {
             return;
         }
 
+        System.out.println();
         System.out.println("Breadth - First Traversal");
         System.out.println("--------------------------");
 
@@ -93,10 +94,13 @@ public class Graph {
 
         Queue<Integer> queue = new LinkedList<Integer>();
 
+        // Below variable tracks the number of islands in graphs in the input
+        int islandsInGraphs = 0;
         for (int index = 0; index < numberOfVertices; ++index) {
             if (!visited[index]) {
                 visited[index] = true;
                 queue.add(index);
+                ++islandsInGraphs;
 
                 while (!queue.isEmpty()) {
                     int data = queue.poll();
@@ -114,6 +118,9 @@ public class Graph {
             }
 
         }
+
+        System.out.println();
+        System.out.println("Islands in this Graph: " + islandsInGraphs);
     }
 
     /**

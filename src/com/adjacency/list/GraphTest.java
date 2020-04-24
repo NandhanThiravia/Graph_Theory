@@ -105,6 +105,19 @@ public class GraphTest {
 
     private static void analyzeGraph4() {
         Graph graph4 = new Graph(7);
+
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 2 -> 1 -> NULL
+        // [1] -> 0 -> 3 -> NULL
+        // [2] -> 3 -> 0 -> NULL
+        // [3] -> 2 -> 1 -> NULL
+        // [4] -> 6 -> 5 -> NULL
+        // [5] -> 6 -> 4 -> NULL
+        // [6] -> 5 -> 4 -> NUL
+
+        // Has 2 Islands in this graph
+
         graph4.addEdge(0, 1);
         graph4.addEdge(0, 2);
         graph4.addEdge(1, 3);
@@ -119,9 +132,9 @@ public class GraphTest {
         graph4.addEdge(5, 6);
         graph4.addEdge(6, 4);
         graph4.addEdge(6, 5);
-        
+
         graph4.display();
-        
+
         graph4.breadthFirstTraversal();
     }
 
