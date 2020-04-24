@@ -136,6 +136,8 @@ public class GraphTest {
         graph4.display();
 
         graph4.breadthFirstTraversal();
+
+        graph4.depthFirstTraversal();
     }
 
     public static void main(String[] args) {

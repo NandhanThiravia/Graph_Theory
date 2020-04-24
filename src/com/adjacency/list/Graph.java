@@ -95,12 +95,14 @@ public class Graph {
         Queue<Integer> queue = new LinkedList<Integer>();
 
         // Below variable tracks the number of islands in graphs in the input
-        int islandsInGraphs = 0;
+        int islands = 0;
         for (int index = 0; index < numberOfVertices; ++index) {
             if (!visited[index]) {
                 visited[index] = true;
                 queue.add(index);
-                ++islandsInGraphs;
+                ++islands;
+                System.out.println();
+                System.out.println("Island: " + islands);
 
                 while (!queue.isEmpty()) {
                     int data = queue.poll();
@@ -120,7 +122,7 @@ public class Graph {
         }
 
         System.out.println();
-        System.out.println("Islands in this Graph: " + islandsInGraphs);
+        System.out.println("Islands in this Graph: " + islands);
     }
 
     /**
@@ -141,33 +143,33 @@ public class Graph {
 
         Stack<Integer> stack = new Stack<Integer>();
 
-        if (!visited[0]) {
-            visited[0] = true;
-            stack.add(0);
-        }
+        int islands = 0;
+        for (int index = 0; index < numberOfVertices; ++index) {
+            if (!visited[index]) {
+                visited[index] = true;
+                stack.add(index);
+                ++islands;
+                System.out.println();
+                System.out.println("Island: " + islands);
 
-        while (!stack.isEmpty()) {
-            int data = stack.pop();
-            System.out.println(data);
+                while (!stack.isEmpty()) {
+                    int data = stack.pop();
+                    System.out.println(data);
 
-            Node iterator = adjacencyArray[data].head;
-            while (iterator != null) {
-                if (!visited[iterator.data]) {
-                    visited[iterator.data] = true;
-                    stack.add(iterator.data);
+                    Node iterator = adjacencyArray[data].head;
+                    while (iterator != null) {
+                        if (!visited[iterator.data]) {
+                            visited[iterator.data] = true;
+                            stack.add(iterator.data);
+                        }
+                        iterator = iterator.link;
+                    }
                 }
-                iterator = iterator.link;
             }
         }
-    }
 
-    private boolean hasNextNeighbour(int data) {
-        Node iterator = adjacencyArray[data].head;
-        if (iterator == null) {
-            // System.out.println("No children");
-            return false;
-        }
-        return true;
+        System.out.println();
+        System.out.println("Islands: " + islands);
     }
 
     private boolean hasNonVisitedNeighbour(int data) {
