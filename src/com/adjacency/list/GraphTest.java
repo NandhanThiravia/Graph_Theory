@@ -140,10 +140,50 @@ public class GraphTest {
         graph4.depthFirstTraversal();
     }
 
+    public static void analyzeGraph5() {
+        Graph graph = new Graph(6);
+
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 1 -> 2 -> 4 -> NULL
+        // [1] -> 0 -> 3 -> NULL
+        // [2] -> 0 -> 4 -> NULL
+        // [3] -> 1 -> 2 -> 5 -> NULL
+        // [4] -> 0 -> 2 -> 5 -> NULL
+        // [5] -> 3 -> 4 -> NULL
+
+        graph.addEdge(0, 4);
+        graph.addEdge(0, 2);
+        graph.addEdge(0, 1);
+
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 0);
+
+        graph.addEdge(2, 4);
+        graph.addEdge(2, 0);
+
+        graph.addEdge(3, 5);
+        graph.addEdge(3, 2);
+        graph.addEdge(3, 1);
+
+        graph.addEdge(4, 5);
+        graph.addEdge(4, 2);
+        graph.addEdge(4, 0);
+
+        graph.addEdge(5, 4);
+        graph.addEdge(5, 3);
+
+        graph.display();
+        graph.shortestDistance(0);
+
+        graph.shortestDistance(1);
+    }
+
     public static void main(String[] args) {
         // analyzeGraph1();
         // analyzeGraph2();
         // analyzeGraph3();
-        analyzeGraph4();
+        // analyzeGraph4();
+        analyzeGraph5();
     }
 }

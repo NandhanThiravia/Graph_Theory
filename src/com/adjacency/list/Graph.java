@@ -227,4 +227,48 @@ public class Graph {
             System.out.println(output.pop());
         }
     }
+
+    /**
+     * To find the Shortest Distance from a source vertex to other nodes, Breadth
+     * First Search is the best way. Breadth First Search will put nearby neighbours
+     * first to queue thereby marking the distance as 1 and its neighbours as
+     * distance + 1 The same would happen to their first neighbours.
+     * 
+     * @param sourceVertex
+     */
+    public void shortestDistance(int sourceVertex) {
+        Queue<Integer> queue = new LinkedList<Integer>();
+        boolean[] visited = new boolean[numberOfVertices];
+        int[] distance = new int[numberOfVertices];
+
+        for (int index = 0; index < numberOfVertices; ++index) {
+            distance[index] = Integer.MAX_VALUE;
+        }
+
+        visited[sourceVertex] = true;
+        distance[sourceVertex] = 0;
+        queue.add(sourceVertex);
+
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+
+            Node nodeIterator = adjacencyArray[vertex].head;
+            while (nodeIterator != null) {
+                if (!visited[nodeIterator.data]) {
+                    queue.add(nodeIterator.data);
+                    visited[nodeIterator.data] = true;
+                    distance[nodeIterator.data] = distance[vertex] + 1;
+                }
+                nodeIterator = nodeIterator.link;
+            }
+        }
+
+        System.out.println();
+        System.out.println("Shortest Distance from " + sourceVertex + " node");
+        System.out.println("------------------------------");
+        for (int index = 0; index < numberOfVertices; ++index) {
+            System.out.println(distance[index]);
+        }
+        return;
+    }
 }
