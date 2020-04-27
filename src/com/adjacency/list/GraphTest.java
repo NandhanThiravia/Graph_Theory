@@ -138,6 +138,8 @@ public class GraphTest {
         graph4.breadthFirstTraversal();
 
         graph4.depthFirstTraversal();
+
+        graph4.isCycleDetected();
     }
 
     public static void analyzeGraph5() {
@@ -175,8 +177,24 @@ public class GraphTest {
 
         graph.display();
         graph.shortestDistance(0);
-
         graph.shortestDistance(1);
+
+        System.out.println();
+        graph.isCycleDetected();
+    }
+
+    public static void analyze
+    8.Graph6() {
+        Graph graph = new Graph(6);
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 0);
+
+        if (graph.isCycleDetected()) {
+            System.out.println("Cycle Detected");
+        } else {
+            System.out.println("NO Cycle Detected");
+        }
     }
 
     public static void main(String[] args) {
@@ -184,6 +202,7 @@ public class GraphTest {
         // analyzeGraph2();
         // analyzeGraph3();
         // analyzeGraph4();
-        analyzeGraph5();
+        // analyzeGraph5();
+        analyzeGraph6();
     }
 }

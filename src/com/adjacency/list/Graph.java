@@ -271,4 +271,46 @@ public class Graph {
         }
         return;
     }
+
+    public boolean isCycleDetected() {
+        class CycleNode {
+            public int currentNode;
+            public int previousNode;
+
+            public CycleNode(int currentNode, int parentNode) {
+                this.currentNode = currentNode;
+                this.previousNode = parentNode;
+            }
+        }
+
+        boolean isCycleDetected = false;
+        if (numberOfVertices == 0) {
+            System.out.println("No Vertices found");
+            return isCycleDetected;
+        }
+
+        boolean[] visited = new boolean[numberOfVertices];
+        Stack<CycleNode> stack = new Stack<CycleNode>();
+
+        visited[0] = true;
+        stack.add(new CycleNode(0, -1));
+
+        while (!stack.isEmpty()) {
+            CycleNode cycleNode = stack.pop();
+            int currentNode = cycleNode.currentNode;
+            int parentNode = cycleNode.previousNode;
+
+            Node iterator = adjacencyArray[currentNode].head;
+            while (iterator != null) {
+                if (!visited[iterator.data]) {
+                    visited[iterator.data] = true;
+                    stack.add(new CycleNode(iterator.data, currentNode));
+                } else if (iterator.data != parentNode) {
+                    return true;
+                }
+                iterator = iterator.link;
+            }
+        }
+        return isCycleDetected;
+    }
 }
