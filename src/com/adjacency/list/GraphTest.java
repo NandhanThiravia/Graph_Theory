@@ -139,10 +139,10 @@ public class GraphTest {
 
         graph4.depthFirstTraversal();
 
-        graph4.isCycleDetected();
+        graph4.isCycleDetectedUndirected();
     }
 
-    public static void analyzeGraph5() {
+    private static void analyzeGraph5() {
         Graph graph = new Graph(6);
 
         // Adjacency List Presentation
@@ -180,18 +180,123 @@ public class GraphTest {
         graph.shortestDistance(1);
 
         System.out.println();
-        graph.isCycleDetected();
+        graph.isCycleDetectedUndirected();
     }
 
-    public static void analyze
-    8.Graph6() {
+    private static void analyzeGraph6() {
         Graph graph = new Graph(6);
 
         graph.addEdge(0, 1);
         graph.addEdge(1, 0);
 
-        if (graph.isCycleDetected()) {
+        if (graph.isCycleDetectedUndirected()) {
             System.out.println("Cycle Detected");
+        } else {
+            System.out.println("NO Cycle Detected");
+        }
+    }
+
+    private static void analyzeGraph7() {
+        Graph graph = new Graph(6);
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 5);
+        graph.addEdge(3, 4);
+        graph.addEdge(5, 1);
+        graph.display();
+
+        CycleNode node = null;
+        if (null != (node = graph.isCycleDetectedDirected())) {
+            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
+        } else {
+            System.out.println("NO Cycle Detected");
+        }
+    }
+
+    private static void analyzeGraph8() {
+        Graph graph = new Graph(8);
+
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 1 -> NULL
+        // [1] -> 2 -> NULL
+        // [2] -> 3 -> NULL
+        // [3] -> 4 -> NULL
+        // [4] -> 5 -> NULL
+        // [5] -> 6 -> NULL
+        // [6] -> 7 -> NULL
+        // [7] -> NULL
+
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 6);
+        graph.addEdge(6, 7);
+        graph.addEdge(7, 0);
+        graph.display();
+
+        CycleNode node = null;
+        if (null != (node = graph.isCycleDetectedDirected())) {
+            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
+        } else {
+            System.out.println("NO Cycle Detected");
+        }
+    }
+
+    private static void analyzeGraph9() {
+        Graph graph = new Graph(6);
+
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 1 -> NULL
+        // [1] -> NULL
+        // [2] -> 1 -> 3 -> NULL
+        // [3] -> 4 -> NULL
+        // [4] -> 5 -> NULL
+        // [5] -> 2 -> NULL
+
+        graph.addEdge(0, 1);
+        graph.addEdge(2, 3);
+        graph.addEdge(2, 1);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 2);
+        graph.display();
+
+        CycleNode node = null;
+        if (null != (node = graph.isCycleDetectedDirected())) {
+            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
+        } else {
+            System.out.println("NO Cycle Detected");
+        }
+    }
+
+    private static void analyzeGraph10() {
+        Graph graph = new Graph(6);
+
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 1 -> NULL
+        // [2] -> 1 -> 3 -> NULL
+        // [3] -> 4 -> NULL
+        // [4] -> 5 -> NULL
+        // [5] -> 1 -> NULL
+
+        graph.addEdge(0, 1);
+        graph.addEdge(2, 1);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 1);
+        graph.display();
+
+        CycleNode node = null;
+        if (null != (node = graph.isCycleDetectedDirected())) {
+            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
         } else {
             System.out.println("NO Cycle Detected");
         }
@@ -203,6 +308,37 @@ public class GraphTest {
         // analyzeGraph3();
         // analyzeGraph4();
         // analyzeGraph5();
-        analyzeGraph6();
+        // analyzeGraph6();
+        // analyzeGraph7();
+        // analyzeGraph8();
+        // analyzeGraph9();
+        // analyzeGraph10();
+        randomGraph();
+    }
+
+    private static void randomGraph() {
+        Graph graph = new Graph(6);
+
+        graph.addEdge(0, 1);
+        graph.addEdge(2, 1);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 1);
+
+        graph.display();
+
+        CycleNode node = null;
+        if (null != (node = graph.isCycleDetectedDirected())) {
+            System.out.println("Directed: Cycle Detected between " + node.currentNode + " and " + node.parentNode);
+        } else {
+            System.out.println("Directed: NO Cycle Detected");
+        }
+
+        if (graph.isCycleDetectedUndirected()) {
+            System.out.println("Undirected: Cycle Detected");
+        } else {
+            System.out.println("Undirected: NO Cycle Detected");
+        }
     }
 }

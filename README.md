@@ -7,4 +7,5 @@ My learning about Graph Theory Data Structures
 5. Word Ladder Problem Solved - Shortest Chain Length to reach a target word given a start word and a list of words. [WordLadder]
 6. Code to find number of Disconnected Graphs (also called as Islands in Graph) in the Input Graph data using BFS and DFS. [Graph.breadthFirstTraversal, Graph.depthFirstTraversal]
 7. Shortest Distance from a given source code to every other node in a given graph. [Graph.shortestDistance]
-8. Cycle Detection in Un-Directed Graph. [Graph.isCycleDetected]
+8. Cycle Detection in Un-Directed Graph. [Graph.isCycleDetectedUndirected]
+9. Cycle Detection in Directed Graph. [Graph.isCycleDetectedDirected]

@@ -4,6 +4,16 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+class CycleNode {
+    public int currentNode;
+    public int parentNode;
+
+    public CycleNode(int currentNode, int parentNode) {
+        this.currentNode = currentNode;
+        this.parentNode = parentNode;
+    }
+}
+
 class Node {
     public int data;
     public Node link;
@@ -73,6 +83,7 @@ public class Graph {
             }
             System.out.println("NULL");
         }
+        System.out.println();
     }
 
     /**
@@ -123,6 +134,7 @@ public class Graph {
 
         System.out.println();
         System.out.println("Islands in this Graph: " + islands);
+        System.out.println();
     }
 
     /**
@@ -170,6 +182,7 @@ public class Graph {
 
         System.out.println();
         System.out.println("Islands: " + islands);
+        System.out.println();
     }
 
     private boolean hasNonVisitedNeighbour(int data) {
@@ -226,6 +239,7 @@ public class Graph {
         while (!output.isEmpty()) {
             System.out.println(output.pop());
         }
+        System.out.println();
     }
 
     /**
@@ -272,17 +286,7 @@ public class Graph {
         return;
     }
 
-    public boolean isCycleDetected() {
-        class CycleNode {
-            public int currentNode;
-            public int previousNode;
-
-            public CycleNode(int currentNode, int parentNode) {
-                this.currentNode = currentNode;
-                this.previousNode = parentNode;
-            }
-        }
-
+    public boolean isCycleDetectedUndirected() {
         boolean isCycleDetected = false;
         if (numberOfVertices == 0) {
             System.out.println("No Vertices found");
@@ -292,25 +296,90 @@ public class Graph {
         boolean[] visited = new boolean[numberOfVertices];
         Stack<CycleNode> stack = new Stack<CycleNode>();
 
-        visited[0] = true;
-        stack.add(new CycleNode(0, -1));
+        for (int index = 0; index < numberOfVertices; ++index) {
+            if (!visited[index]) {
+                visited[index] = true;
+                stack.add(new CycleNode(index, -1));
 
-        while (!stack.isEmpty()) {
-            CycleNode cycleNode = stack.pop();
-            int currentNode = cycleNode.currentNode;
-            int parentNode = cycleNode.previousNode;
+                while (!stack.isEmpty()) {
+                    CycleNode cycleNode = stack.pop();
+                    int currentNode = cycleNode.currentNode;
+                    int parentNode = cycleNode.parentNode;
 
-            Node iterator = adjacencyArray[currentNode].head;
-            while (iterator != null) {
-                if (!visited[iterator.data]) {
-                    visited[iterator.data] = true;
-                    stack.add(new CycleNode(iterator.data, currentNode));
-                } else if (iterator.data != parentNode) {
-                    return true;
+                    Node iterator = adjacencyArray[currentNode].head;
+                    while (iterator != null) {
+                        if (!visited[iterator.data]) {
+                            visited[iterator.data] = true;
+                            stack.add(new CycleNode(iterator.data, currentNode));
+                        } else if (iterator.data != parentNode) {
+                            return true;
+                        }
+                        iterator = iterator.link;
+                    }
                 }
-                iterator = iterator.link;
             }
         }
         return isCycleDetected;
+    }
+
+    public CycleNode isCycleDetectedDirected() {
+        if (numberOfVertices == 0) {
+            System.out.println("No Vertices found");
+            return null;
+        }
+
+        boolean[] isVisitedGobally = new boolean[numberOfVertices];
+        boolean[] isVisitedLocally = new boolean[numberOfVertices];
+        Stack<Integer> stack = new Stack<Integer>();
+
+        for (int index = 0; index < numberOfVertices; ++index) {
+            if (!isVisitedGobally[index]) {
+                reset(isVisitedLocally);
+                // isVisitedLocally[index] = true;
+
+                stack.add(index);
+
+                while (!stack.isEmpty()) {
+                    int currentNode = stack.pop();
+                    isVisitedLocally[currentNode] = true;
+
+                    Node iterator = adjacencyArray[currentNode].head;
+                    if (iterator == null) {
+                        // The idea behind this if condition is as follows:
+                        // When we try to go down the line in a graph to find for any cycle and if we
+                        // come to an end, then we merge local visited array to global visited array
+                        // and reset the local array and search again
+                        merge(isVisitedGobally, isVisitedLocally);
+                        reset(isVisitedLocally);
+                        continue;
+                    }
+                    while (iterator != null) {
+                        if (!isVisitedLocally[iterator.data]) {
+                            // isVisitedLocally[iterator.data] = true;
+                            stack.add(iterator.data);
+                        } else if (isVisitedLocally[iterator.data]) {
+                            return new CycleNode(iterator.data, currentNode);
+                        }
+                        iterator = iterator.link;
+                    }
+                }
+
+                // Bring in the changes of Local Visited Array into Global Visited Array
+                merge(isVisitedGobally, isVisitedLocally);
+            }
+        }
+        return null;
+    }
+
+    private void merge(boolean[] isVisitedGobally, boolean[] isVisitedLocally) {
+        for (int index = 0; index < isVisitedGobally.length; ++index) {
+            isVisitedGobally[index] = isVisitedGobally[index] | isVisitedLocally[index];
+        }
+    }
+
+    private void reset(boolean[] array) {
+        for (int index = 0; index < array.length; ++index) {
+            array[index] = false;
+        }
     }
 }
