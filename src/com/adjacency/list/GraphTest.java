@@ -176,8 +176,8 @@ public class GraphTest {
         graph.addEdge(5, 3);
 
         graph.display();
-        graph.shortestDistance(0);
-        graph.shortestDistance(1);
+        graph.unitShortestDistance(0);
+        graph.unitShortestDistance(1);
 
         System.out.println();
         graph.isCycleDetectedUndirected();
@@ -302,21 +302,7 @@ public class GraphTest {
         }
     }
 
-    public static void main(String[] args) {
-        // analyzeGraph1();
-        // analyzeGraph2();
-        // analyzeGraph3();
-        // analyzeGraph4();
-        // analyzeGraph5();
-        // analyzeGraph6();
-        // analyzeGraph7();
-        // analyzeGraph8();
-        // analyzeGraph9();
-        // analyzeGraph10();
-        randomGraph();
-    }
-
-    private static void randomGraph() {
+    private static void analyzeGraph11() {
         Graph graph = new Graph(6);
 
         graph.addEdge(0, 1);
@@ -340,5 +326,114 @@ public class GraphTest {
         } else {
             System.out.println("Undirected: NO Cycle Detected");
         }
+    }
+
+    private static void analyzeGraph12() {
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 3 -> 2 -> NULL
+        // [1] -> 4 -> 3 -> NULL
+        // [2] -> NULL
+        // [3] -> NULL
+        // [4] -> NULL
+
+        Graph graph = new Graph(5);
+        graph.addEdge(0, 2);
+        graph.addEdge(0, 3);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+
+        graph.display();
+        graph.topologicalSort();
+    }
+
+    private static void analyzeGraph13() {
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 2 -> 1 -> NULL
+        // [1] -> 3 -> NULL
+        // [2] -> 3 -> NULL
+        // [3] -> 5 -> 4 -> NULL
+        // [4] -> NULL
+        // [5] -> NULL
+
+        Graph graph = new Graph(6);
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 4);
+        graph.addEdge(3, 5);
+
+        graph.display();
+        graph.topologicalSort();
+        graph.unitShortestDistance(0);
+    }
+
+    private static void analyzeGraph14() {
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 4(1) -> 1(2) -> NULL
+        // [1] -> 2(3) -> NULL
+        // [2] -> 3(6) -> NULL
+        // [3] -> NULL
+        // [4] -> 5(4) -> 2(2) -> NULL
+        // [5] -> 3(1) -> NULL
+
+        Graph graph = new Graph(6);
+        graph.addEdge(0, 1, 2);
+        graph.addEdge(0, 4, 1);
+        graph.addEdge(1, 2, 3);
+        graph.addEdge(2, 3, 6);
+        graph.addEdge(4, 2, 2);
+        graph.addEdge(4, 5, 4);
+        graph.addEdge(5, 3, 1);
+
+        graph.display();
+//        graph.topologicalSort();
+//        graph.nonUnitShortestDistance(0);
+        graph.topoShortestDistance(0);
+    }
+
+    private static void analyzeGraph15() {
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 4(1) -> 1(2) -> NULL
+        // [1] -> 2(3) -> NULL
+        // [2] -> 3(6) -> NULL
+        // [3] -> NULL
+        // [4] -> 5(4) -> 2(2) -> NULL
+        // [5] -> 3(1) -> NULL
+
+        Graph graph = new Graph(7);
+        graph.addEdge(0, 1, 10);
+        graph.addEdge(0, 5, 1);
+        graph.addEdge(1, 2, 20);
+        graph.addEdge(2, 3, 15);
+        graph.addEdge(3, 4, 10);
+        graph.addEdge(5, 6, 1);
+        graph.addEdge(6, 1, 1);
+
+        graph.display();
+        graph.topologicalSort();
+        graph.nonUnitShortestDistance(0);
+    }
+
+    public static void main(String[] args) {
+        // analyzeGraph1();
+        // analyzeGraph2();
+        // analyzeGraph3();
+        // analyzeGraph4();
+        // analyzeGraph5();
+        // analyzeGraph6();
+        // analyzeGraph7();
+        // analyzeGraph8();
+        // analyzeGraph9();
+        // analyzeGraph10();
+        // analyzeGraph11();
+        // analyzeGraph12();
+        // analyzeGraph13();
+        analyzeGraph14();
+        // analyzeGraph15();
     }
 }

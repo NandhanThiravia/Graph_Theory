@@ -9,3 +9,5 @@ My learning about Graph Theory Data Structures
 7. Shortest Distance from a given source code to every other node in a given graph. [Graph.shortestDistance]
 8. Cycle Detection in Un-Directed Graph. [Graph.isCycleDetectedUndirected]
 9. Cycle Detection in Directed Graph. [Graph.isCycleDetectedDirected]
+10. Shortest Distance Algorithm - Breadth First Algorithm. [Graph.nonUnitShortestDistance]
+11. Shortest Distance Algorithm - Topological Sorting Algorithm. [Graph.topoShortestDistance]

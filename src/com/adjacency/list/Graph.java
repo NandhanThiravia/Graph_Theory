@@ -16,6 +16,7 @@ class CycleNode {
 
 class Node {
     public int data;
+    public int distance;
     public Node link;
 
     @SuppressWarnings("unused")
@@ -25,6 +26,11 @@ class Node {
     public Node(int data) {
         this.data = data;
         this.link = null;
+    }
+
+    public Node(int data, int distance) {
+        this.data = data;
+        this.distance = distance;
     }
 }
 
@@ -57,8 +63,8 @@ public class Graph {
         visited = new boolean[this.numberOfVertices];
     }
 
-    public void addEdge(int fromVertex, int toVertex) {
-        Node node = new Node(toVertex);
+    public void addEdge(int fromVertex, int toVertex, int distance) {
+        Node node = new Node(toVertex, distance);
 
         if (adjacencyArray[fromVertex].head == null) {
             adjacencyArray[fromVertex].head = node;
@@ -66,6 +72,10 @@ public class Graph {
             node.link = adjacencyArray[fromVertex].head;
             adjacencyArray[fromVertex].head = node;
         }
+    }
+
+    public void addEdge(int fromVertex, int toVertex) {
+        addEdge(fromVertex, toVertex, 1);
     }
 
     /**
@@ -78,7 +88,7 @@ public class Graph {
             System.out.print("[" + index + "] -> ");
             Node traversal = adjacencyArray[index].head;
             while (traversal != null) {
-                System.out.print(traversal.data + " -> ");
+                System.out.print(traversal.data + "(" + traversal.distance + ")" + " -> ");
                 traversal = traversal.link;
             }
             System.out.println("NULL");
@@ -250,7 +260,7 @@ public class Graph {
      * 
      * @param sourceVertex
      */
-    public void shortestDistance(int sourceVertex) {
+    public void unitShortestDistance(int sourceVertex) {
         Queue<Integer> queue = new LinkedList<Integer>();
         boolean[] visited = new boolean[numberOfVertices];
         int[] distance = new int[numberOfVertices];
@@ -284,6 +294,95 @@ public class Graph {
             System.out.println(distance[index]);
         }
         return;
+    }
+
+    public void nonUnitShortestDistance(int sourceVertex) {
+        Queue<Integer> queue = new LinkedList<Integer>();
+        int[] distance = new int[numberOfVertices];
+
+        for (int index = 0; index < numberOfVertices; ++index) {
+            distance[index] = Integer.MAX_VALUE;
+        }
+
+        distance[sourceVertex] = 0;
+        queue.add(sourceVertex);
+
+        int tempDistance = 0;
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+
+            Node nodeIterator = adjacencyArray[vertex].head;
+            while (nodeIterator != null) {
+                queue.add(nodeIterator.data);
+                tempDistance = distance[vertex] + nodeIterator.distance;
+                if (distance[nodeIterator.data] > tempDistance) {
+                    distance[nodeIterator.data] = tempDistance;
+                }
+                nodeIterator = nodeIterator.link;
+            }
+        }
+
+        System.out.println();
+        System.out.println("Shortest Distance from " + sourceVertex + " node");
+        System.out.println("------------------------------");
+        for (int index = 0; index < numberOfVertices; ++index) {
+            System.out.println(distance[index]);
+        }
+        System.out.println();
+        return;
+    }
+
+    public void topoShortestDistance(int sourceVertex) {
+        for (int index = 0; index < numberOfVertices; ++index) {
+            visited[index] = false;
+        }
+
+        Stack<Integer> output = new Stack<Integer>();
+        Stack<Integer> stack = new Stack<Integer>();
+
+        for (int nodeInSequence = 0; nodeInSequence < numberOfVertices; ++nodeInSequence) {
+            if (!visited[nodeInSequence]) {
+                visited[nodeInSequence] = true;
+                stack.push(nodeInSequence);
+
+                while (!stack.isEmpty()) {
+                    int node = stack.pop();
+
+                    while (hasNonVisitedNeighbour(node)) {
+                        stack.push(node);
+                        node = nextNonVisitedNeighbour(node);
+                        visited[node] = true;
+                    }
+                    output.push(node);
+                }
+            }
+        }
+
+        int[] distance = new int[numberOfVertices];
+        for (int index = 0; index < numberOfVertices; ++index) {
+            distance[index] = 500;
+        }
+
+        distance[sourceVertex] = 0;
+        while (!output.isEmpty()) {
+            int data = output.pop();
+
+            Node node = adjacencyArray[data].head;
+            while (node != null) {
+                if (distance[node.data] > distance[data] + node.distance) {
+                    distance[node.data] = distance[data] + node.distance;
+                }
+                node = node.link;
+            }
+        }
+
+        System.out.println("Shortest Distance");
+        System.out.println("-----------------");
+        for (int index = 0; index < numberOfVertices; ++index) {
+            System.out.println(distance[index]);
+        }
+        System.out.println();
+
     }
 
     public boolean isCycleDetectedUndirected() {
