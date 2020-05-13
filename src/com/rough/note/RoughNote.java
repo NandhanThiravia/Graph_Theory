@@ -1,5 +1,7 @@
 package com.rough.note;
 
+import java.util.ArrayList;
+
 public class RoughNote {
     public static void strcmp(String[] args) {
         String start = "toon";
@@ -13,7 +15,10 @@ public class RoughNote {
     }
 
     public static void main(String[] args) {
-        new RoughNote().testArray();
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(1);
+        list.add(2);
+        System.out.println();
     }
 
     private void testArray() {
