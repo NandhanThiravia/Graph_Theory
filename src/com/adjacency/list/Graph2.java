@@ -10,6 +10,10 @@ public class Graph2 {
         UNDIRECTED, DIRECTED
     }
 
+    enum Algorithm {
+        KAHN, DFS, BFS
+    }
+
     class Vertex {
         public int value;
         public int distance;
@@ -268,7 +272,7 @@ public class Graph2 {
         return;
     }
 
-    private boolean isUndirectedCyclic() {
+    private boolean isDFSUndirectedCyclic() {
         boolean isCyclic = false;
         if (mTotalVertex == 0) {
             System.out.println("No Vertices found");
@@ -307,10 +311,68 @@ public class Graph2 {
         return isCyclic;
     }
 
-    public boolean isCyclic() {
+    private boolean isKahnDirectedCyclic() {
+        boolean isVisited[] = new boolean[mTotalVertex];
+        int inDegree[] = new int[mTotalVertex];
+
+        for (int index = 0; index < mTotalVertex; ++index) {
+            ArrayList<Vertex> innerList = mAdjacencyList.get(index);
+            for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                ++inDegree[innerList.get(innerIndex).value];
+            }
+        }
+
+        boolean isCyclic = true;
+        int visitedCount = 0;
+        Queue<Integer> queue = new LinkedList<Integer>();
+        while (true) {
+            boolean isFound = false;
+            for (int index = 0; index < mTotalVertex; ++index) {
+                if (!isVisited[index] && inDegree[index] == 0) {
+                    isFound = true;
+                    queue.add(index);
+                    isVisited[index] = true;
+                    ++visitedCount;
+                }
+            }
+
+            if (!isFound) {
+                break;
+            }
+
+            while (!queue.isEmpty()) {
+                int node = queue.poll();
+                ArrayList<Vertex> innerList = mAdjacencyList.get(node);
+                for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                    --inDegree[innerList.get(innerIndex).value];
+                }
+            }
+        }
+
+        if (visitedCount == mTotalVertex) {
+            isCyclic = false;
+        }
+        return isCyclic;
+    }
+
+    /**
+     * it let's know if a Graph is Cyclic or Acyclic.
+     * 
+     * For Undirected Graphs, DFS / BFS Algorithm can be used, either Stack of Queue.
+     * For Directed Graphs, KAHN's Algorithm is used.
+     * @param mAlgorithm
+     * @return
+     */
+    public boolean isCyclic(Algorithm mAlgorithm) {
         boolean isCyclic = false;
         if (Type.UNDIRECTED == mType) {
-            isCyclic = isUndirectedCyclic();
+            if (Algorithm.DFS == mAlgorithm) {
+                isCyclic = isDFSUndirectedCyclic();
+            }
+        } else if (Type.DIRECTED == mType) {
+            if (Algorithm.KAHN == mAlgorithm) {
+                isCyclic = isKahnDirectedCyclic();
+            }
         }
         String status = "";
         status = (isCyclic ? "Cyclic" : "Acyclic");

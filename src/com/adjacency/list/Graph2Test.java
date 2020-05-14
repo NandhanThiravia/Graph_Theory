@@ -1,5 +1,6 @@
 package com.adjacency.list;
 
+import com.adjacency.list.Graph2.Algorithm;
 import com.adjacency.list.Graph2.Type;
 
 public class Graph2Test {
@@ -160,7 +161,7 @@ public class Graph2Test {
         graph.shortestDistance(0);
         graph.shortestDistance(1);
 
-        graph.isCyclic();
+        graph.isCyclic(Algorithm.DFS);
     }
 
     private static void analyzeGraph6() {
@@ -177,11 +178,11 @@ public class Graph2Test {
         graph.addEdge(2, 0);
 
         graph.display();
-        graph.isCyclic();
+        graph.isCyclic(Algorithm.DFS);
     }
 
     private static void analyzeGraph7() {
-        Graph graph = new Graph(6);
+        Graph2 graph = new Graph2(6, Type.DIRECTED);
 
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
@@ -191,12 +192,8 @@ public class Graph2Test {
         graph.addEdge(5, 1);
         graph.display();
 
-        CycleNode node = null;
-        if (null != (node = graph.isCycleDetectedDirected())) {
-            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
-        } else {
-            System.out.println("NO Cycle Detected");
-        }
+        graph.isCyclic(Algorithm.KAHN);
+        graph.shortestDistance(1);
     }
 
     private static void analyzeGraph8() {
@@ -409,8 +406,8 @@ public class Graph2Test {
         // analyzeGraph3();
         // analyzeGraph4();
         // analyzeGraph5();
-        analyzeGraph6();
-        // analyzeGraph7();
+        // analyzeGraph6();
+        analyzeGraph7();
         // analyzeGraph8();
         // analyzeGraph9();
         // analyzeGraph10();

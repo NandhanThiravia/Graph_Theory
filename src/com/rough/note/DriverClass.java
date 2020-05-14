@@ -1,115 +1,72 @@
 package com.rough.note;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-//{ Driver Code Starts
+// { Driver Code Starts
+// Initial Template for Java
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Stack;
 
 class DriverClass {
-    public static void main(String[] args) throws IOException {
-        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-        int t = Integer.parseInt(read.readLine());
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
 
         while (t-- > 0) {
-            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-            String st[] = read.readLine().trim().split("\\s+");
-            int edg = Integer.parseInt(st[0]);
-            int nov = Integer.parseInt(st[1]);
+            int N = sc.nextInt();
+            int M = sc.nextInt();
 
-            for (int i = 0; i < nov + 1; i++)
-                list.add(i, new ArrayList<Integer>());
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>(N);
 
-            String s[] = read.readLine().trim().split("\\s+");
-            int p = 0;
-            for (int i = 1; i <= edg; i++) {
-                int u = Integer.parseInt(s[p++]);
-                int v = Integer.parseInt(s[p++]);
-                list.get(u).add(v);
+            // creating arraylist of arraylist
+            for (int i = 0; i < N; i++) {
+                ArrayList<Integer> temp = new ArrayList<>(M);
+                list.add(i, temp);
             }
 
-            int[] res = new TopologicalSort().topoSort(list, nov);
-
-            if (check(list, nov, res) == true)
-                System.out.println("1");
-            else
-                System.out.println("0");
-        }
-    }
-
-    static boolean check(ArrayList<ArrayList<Integer>> list, int V, int[] res) {
-        int[] map = new int[V];
-        for (int i = 0; i < V; i++) {
-            map[res[i]] = i;
-        }
-        for (int i = 0; i < V; i++) {
-            for (int v : list.get(i)) {
-                if (map[i] > map[v])
-                    return false;
+            // adding elements to the arraylist of arraylist
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M; j++) {
+                    int val = sc.nextInt();
+                    list.get(i).add(j, val);
+                }
             }
+
+            System.out.println(new Islands().findIslands(list, N, M));
         }
-        return true;
     }
 }
-//} Driver Code Ends
+// } Driver Code Ends
 
-/* Complete the function below */
+// User function Template for Java
 
-/*
- * ArrayList<ArrayList<>Integer>list: to represent graph containing 'N' vertices
- * and edges between them N: represent number of vertices
- */
-class TopologicalSort {
-    static int[] topoSort(ArrayList<ArrayList<Integer>> list, int N) {
+class Islands {
+
+    // Function to find the number of island in the given list
+    // N, M: size of list row and column respectively
+    static int findIslands(ArrayList<ArrayList<Integer>> list, int N, int M) {
         boolean isVisited[] = new boolean[N];
-        Stack<Integer> outputStack = new Stack<Integer>();
         Stack<Integer> stack = new Stack<Integer>();
 
+        int islands = 0;
         for (int index = 0; index < N; ++index) {
             if (!isVisited[index]) {
                 isVisited[index] = true;
-                stack.push(index);
+                stack.add(index);
+                ++islands;
 
                 while (!stack.isEmpty()) {
                     int vertex = stack.pop();
 
-                    while (hasNonVisitedNeighbour(vertex, list, isVisited)) {
-                        stack.push(vertex);
-                        vertex = nextNonVisitedNeighbour(vertex, list, isVisited);
-                        isVisited[vertex] = true;
+                    ArrayList<Integer> innerList = list.get(vertex);
+                    for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                        if (!isVisited[innerList.get(innerIndex)]) {
+                            isVisited[innerList.get(innerIndex)] = true;
+                            stack.add(innerList.get(innerIndex));
+                        }
                     }
-                    outputStack.push(vertex);
                 }
             }
         }
-
-        int index = 0;
-        int[] outputArray = new int[outputStack.size()];
-        while (!outputStack.isEmpty()) {
-            outputArray[index] = outputStack.pop();
-            ++index;
-        }
-        return outputArray;
-    }
-
-    static boolean hasNonVisitedNeighbour(int vertex, ArrayList<ArrayList<Integer>> list, boolean[] isVisited) {
-        ArrayList<Integer> innerList = list.get(vertex);
-        for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
-            if (!isVisited[innerList.get(innerIndex)]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    static int nextNonVisitedNeighbour(int vertex, ArrayList<ArrayList<Integer>> list, boolean[] isVisited) {
-        ArrayList<Integer> innerList = list.get(vertex);
-        for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
-            if (!isVisited[innerList.get(innerIndex)]) {
-                return innerList.get(innerIndex);
-            }
-        }
-        return -1;
+        return islands;
     }
 }
