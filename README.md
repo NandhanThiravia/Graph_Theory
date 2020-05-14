@@ -13,5 +13,4 @@ Graph2 Class: It is based on built-in ArrayList Class. Looks simpler than Graph 
 7. Shortest Distance from a given source code to every other node in a given graph. [Graph2.shortestDistance | Graph.shortestDistance]
 8. Cycle Detection in Undirected Graph. [Graph2.isDFSUndirectedCyclic | Graph.isCycleDetectedUndirected]
 9. Cycle Detection in Directed Graph. [Graph2.isKahnDirectedCyclic | Graph.isCycleDetectedDirected]
-10. Shortest Distance Algorithm - Breadth First Algorithm. [Graph.nonUnitShortestDistance]
-11. Shortest Distance Algorithm - Topological Sorting Algorithm. [Graph.topoShortestDistance]
+10. Path Detection Algorithm. [Graph2.hasPath]

@@ -11,7 +11,7 @@ public class Graph2 {
     }
 
     enum Algorithm {
-        KAHN, DFS, BFS
+        KAHN, DFS, BFS, TOPOLOGICAL
     }
 
     class Vertex {
@@ -188,9 +188,10 @@ public class Graph2 {
     }
 
     /**
-     * Displays the Topological Sort of a Directed Graph
+     * Displays the Topological Sort of a Directed Graph But it fails to work, if
+     * there is a Cycle in the Graph
      */
-    public void topologicalSort() {
+    private void topologicalSortDFS() {
         boolean isVisited[] = new boolean[mTotalVertex];
         Stack<Integer> output = new Stack<Integer>();
         Stack<Integer> stack = new Stack<Integer>();
@@ -221,15 +222,133 @@ public class Graph2 {
         System.out.println();
     }
 
+    private void topologicalSortKahn() {
+        boolean isVisited[] = new boolean[mTotalVertex];
+        int inDegree[] = new int[mTotalVertex];
+
+        for (int index = 0; index < mTotalVertex; ++index) {
+            ArrayList<Vertex> innerList = mAdjacencyList.get(index);
+            for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                ++inDegree[innerList.get(innerIndex).value];
+            }
+        }
+
+        int[] output = new int[mTotalVertex];
+        int visitedCount = 0;
+        boolean isCyclic = true;
+        Queue<Integer> queue = new LinkedList<Integer>();
+        while (true) {
+            boolean isFound = false;
+            for (int index = 0; index < mTotalVertex; ++index) {
+                if (!isVisited[index] && inDegree[index] == 0) {
+                    isFound = true;
+                    queue.add(index);
+                    isVisited[index] = true;
+                    output[visitedCount] = index;
+                    ++visitedCount;
+                }
+            }
+
+            if (!isFound) {
+                break;
+            }
+
+            while (!queue.isEmpty()) {
+                int node = queue.poll();
+                ArrayList<Vertex> innerList = mAdjacencyList.get(node);
+                for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                    --inDegree[innerList.get(innerIndex).value];
+                }
+            }
+        }
+
+        if (visitedCount == mTotalVertex) {
+            isCyclic = false;
+        }
+
+        if (isCyclic) {
+            System.err.println("The Graph is Cyclic, so sort cannot be performed");
+            return;
+        }
+
+        System.out.println("Topological Sort");
+        System.out.println("-----------------");
+        for (int index = 0; index < output.length; ++index) {
+            System.out.println(output[index]);
+        }
+    }
+
+    /**
+     * Topological Sort using: 1) Kahn's Algorithm 2) Depth-First Search Algorithm
+     * 
+     * @param mAlgorithm
+     */
+    public void topologicalSort(Algorithm mAlgorithm) {
+        if (Type.DIRECTED == mType) {
+            if (Algorithm.DFS == mAlgorithm) {
+                if (!isCyclic(Algorithm.KAHN)) {
+                    topologicalSortDFS();
+                } else {
+                    System.out.println("Topological Sort cannot be performed, because the Graph is Cyclic");
+                }
+            } else if (Algorithm.KAHN == mAlgorithm) {
+                topologicalSortKahn();
+            }
+        } else {
+            System.err.println("Topological Sort is only for Directed Graphs");
+        }
+    }
+
     /**
      * To find the Shortest Distance from a source vertex to other nodes, Breadth
      * First Search is the best way. Breadth First Search will put nearby neighbours
      * first to queue thereby marking the distance as 1 and its neighbours as
      * distance + 1 The same would happen to their first neighbours.
-     * 
+     *
+     * Shortest Distance Algorithm would not work with DFS Algorithm, because of the
+     * way it operates and the way isVisited boolean array is utilized.
+     *
      * @param sourceVertex
      */
-    public void shortestDistance(int sourceVertex) {
+    private void shortestDistanceDirectedBFS(int sourceVertex) {
+        Queue<Integer> queue = new LinkedList<Integer>();
+        int[] distance = new int[mTotalVertex];
+
+        for (int index = 0; index < mTotalVertex; ++index) {
+            distance[index] = Integer.MAX_VALUE;
+        }
+
+        distance[sourceVertex] = 0;
+        queue.add(sourceVertex);
+
+        while (!queue.isEmpty()) {
+            int parentVertex = queue.poll();
+
+            ArrayList<Vertex> innerList = mAdjacencyList.get(parentVertex);
+            for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                int childVertex = innerList.get(innerIndex).value;
+                int childVertexDistance = innerList.get(innerIndex).distance;
+                queue.add(childVertex);
+                if (distance[childVertex] > distance[parentVertex] + childVertexDistance) {
+                    distance[childVertex] = distance[parentVertex] + childVertexDistance;
+                }
+            }
+        }
+
+        System.out.println();
+        System.out.println("Shortest Distance from " + sourceVertex + " node");
+        System.out.println("------------------------------");
+        for (int index = 0; index < mTotalVertex; ++index) {
+            if (distance[index] == Integer.MAX_VALUE) {
+                System.out.println(index + ": INF");
+            } else {
+                System.out.println(index + ": " + distance[index]);
+            }
+        }
+        return;
+    }
+
+    private void shortestDistanceUndirectedBFS(int sourceVertex) {
         Queue<Integer> queue = new LinkedList<Integer>();
         boolean[] isVisited = new boolean[mTotalVertex];
         int[] distance = new int[mTotalVertex];
@@ -249,9 +368,10 @@ public class Graph2 {
             for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
                 int childVertex = innerList.get(innerIndex).value;
                 int childVertexDistance = innerList.get(innerIndex).distance;
+
                 if (!isVisited[childVertex]) {
-                    queue.add(childVertex);
                     isVisited[childVertex] = true;
+                    queue.add(childVertex);
                     if (distance[childVertex] > distance[parentVertex] + childVertexDistance) {
                         distance[childVertex] = distance[parentVertex] + childVertexDistance;
                     }
@@ -264,15 +384,27 @@ public class Graph2 {
         System.out.println("------------------------------");
         for (int index = 0; index < mTotalVertex; ++index) {
             if (distance[index] == Integer.MAX_VALUE) {
-                System.out.println("INF");
+                System.out.println(index + ": INF");
             } else {
-                System.out.println(distance[index]);
+                System.out.println(index + ": " + distance[index]);
             }
         }
         return;
     }
 
-    private boolean isDFSUndirectedCyclic() {
+    public void shortestDistance(int sourceVertex, Algorithm mAlgorithm) {
+        if (Type.UNDIRECTED == mType) {
+            shortestDistanceUndirectedBFS(sourceVertex);
+        } else if (Type.DIRECTED == mType) {
+            if (Algorithm.BFS == mAlgorithm) {
+                shortestDistanceDirectedBFS(sourceVertex);
+            } else if (Algorithm.TOPOLOGICAL == mAlgorithm) {
+                // TBD
+            }
+        }
+    }
+
+    private boolean isCyclicDFSUndirected() {
         boolean isCyclic = false;
         if (mTotalVertex == 0) {
             System.out.println("No Vertices found");
@@ -311,7 +443,7 @@ public class Graph2 {
         return isCyclic;
     }
 
-    private boolean isKahnDirectedCyclic() {
+    private boolean isCyclicKahnDirected() {
         boolean isVisited[] = new boolean[mTotalVertex];
         int inDegree[] = new int[mTotalVertex];
 
@@ -357,9 +489,11 @@ public class Graph2 {
 
     /**
      * it let's know if a Graph is Cyclic or Acyclic.
+     *
+     * For Undirected Graphs: 1) Depth-First Search Algorithm
      * 
-     * For Undirected Graphs, DFS / BFS Algorithm can be used, either Stack of Queue.
-     * For Directed Graphs, KAHN's Algorithm is used.
+     * For Directed Graphs: 1) KAHN's Algorithm 2) Topological Algorithm
+     *
      * @param mAlgorithm
      * @return
      */
@@ -367,11 +501,13 @@ public class Graph2 {
         boolean isCyclic = false;
         if (Type.UNDIRECTED == mType) {
             if (Algorithm.DFS == mAlgorithm) {
-                isCyclic = isDFSUndirectedCyclic();
+                isCyclic = isCyclicDFSUndirected();
             }
         } else if (Type.DIRECTED == mType) {
             if (Algorithm.KAHN == mAlgorithm) {
-                isCyclic = isKahnDirectedCyclic();
+                isCyclic = isCyclicKahnDirected();
+            } else if (Algorithm.TOPOLOGICAL == mAlgorithm) {
+                // TBD
             }
         }
         String status = "";
@@ -379,5 +515,39 @@ public class Graph2 {
         System.out.println();
         System.out.println("The Graph is " + status);
         return isCyclic;
+    }
+
+    public boolean hasPath(int source, int destination) {
+        boolean hasPath = false;
+
+        boolean[] isVisited = new boolean[mTotalVertex];
+        Stack<Integer> stack = new Stack<Integer>();
+        int childVertex = -1;
+
+        isVisited[source] = true;
+        stack.push(source);
+
+        while (!stack.isEmpty()) {
+            int vertex = stack.pop();
+
+            if (vertex == destination) {
+                hasPath = true;
+                break;
+            }
+
+            ArrayList<Vertex> innerList = mAdjacencyList.get(vertex);
+            for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                childVertex = innerList.get(innerIndex).value;
+                if (!isVisited[childVertex]) {
+                    isVisited[childVertex] = true;
+                    stack.push(childVertex);
+                }
+            }
+        }
+
+        String status = (hasPath ? "A" : "NO");
+        System.out.println();
+        System.out.println("There is " + status + " path from " + source + " to " + destination);
+        return hasPath;
     }
 }

@@ -63,12 +63,11 @@ public class Graph2Test {
         graph.addEdge(8, 2);
         graph.addEdge(9, 4);
 
-        System.out.println();
-        System.out.println("Graph 2");
-        System.out.println("--------");
         graph.display();
-        System.out.println();
-        graph.topologicalSort();
+        graph.isCyclic(Algorithm.KAHN);
+        graph.topologicalSort(Algorithm.DFS);
+        graph.topologicalSort(Algorithm.KAHN);
+        graph.hasPath(3, 3);
     }
 
     private static void analyzeGraph3() {
@@ -95,7 +94,7 @@ public class Graph2Test {
         System.out.println("--------");
         graph.display();
         System.out.println();
-        graph.topologicalSort();
+        graph.topologicalSort(Algorithm.DFS);
     }
 
     private static void analyzeGraph4() {
@@ -137,12 +136,12 @@ public class Graph2Test {
 
         // Adjacency List Presentation
         // ----------------------------
-        // [0] -> 1 -> 2 -> 4 -> NULL
-        // [1] -> 0 -> 3 -> NULL
-        // [2] -> 0 -> 4 -> NULL
-        // [3] -> 1 -> 2 -> 5 -> NULL
-        // [4] -> 0 -> 2 -> 5 -> NULL
-        // [5] -> 3 -> 4 -> NULL
+        // [0] -> 4(1) -> 2(1) -> 1(1) -> NULL
+        // [1] -> 0(1) -> 3(1) -> NULL
+        // [2] -> 0(1) -> 4(1) -> 3(1) -> NULL
+        // [3] -> 1(1) -> 5(1) -> 2(1) -> NULL
+        // [4] -> 0(1) -> 2(1) -> 5(1) -> NULL
+        // [5] -> 3(1) -> 4(1) -> NULL
 
         graph.addEdge(0, 4);
         graph.addEdge(0, 2);
@@ -158,8 +157,8 @@ public class Graph2Test {
         graph.addEdge(4, 5);
 
         graph.display();
-        graph.shortestDistance(0);
-        graph.shortestDistance(1);
+        graph.shortestDistance(0, Algorithm.BFS);
+        graph.shortestDistance(1, Algorithm.BFS);
 
         graph.isCyclic(Algorithm.DFS);
     }
@@ -193,22 +192,22 @@ public class Graph2Test {
         graph.display();
 
         graph.isCyclic(Algorithm.KAHN);
-        graph.shortestDistance(1);
+        graph.shortestDistance(1, Algorithm.BFS);
     }
 
     private static void analyzeGraph8() {
-        Graph graph = new Graph(8);
+        Graph2 graph = new Graph2(8, Type.DIRECTED);
 
-        // Adjacency List Presentation
+        // Adjacency List Representation
         // ----------------------------
-        // [0] -> 1 -> NULL
-        // [1] -> 2 -> NULL
-        // [2] -> 3 -> NULL
-        // [3] -> 4 -> NULL
-        // [4] -> 5 -> NULL
-        // [5] -> 6 -> NULL
-        // [6] -> 7 -> NULL
-        // [7] -> NULL
+        // [0] -> 1(1) -> NULL
+        // [1] -> 2(1) -> NULL
+        // [2] -> 3(1) -> NULL
+        // [3] -> 4(1) -> NULL
+        // [4] -> 5(1) -> NULL
+        // [5] -> 6(1) -> NULL
+        // [6] -> 7(1) -> NULL
+        // [7] -> 0(1) -> NULL
 
         graph.addEdge(0, 1);
         graph.addEdge(1, 2);
@@ -220,25 +219,21 @@ public class Graph2Test {
         graph.addEdge(7, 0);
         graph.display();
 
-        CycleNode node = null;
-        if (null != (node = graph.isCycleDetectedDirected())) {
-            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
-        } else {
-            System.out.println("NO Cycle Detected");
-        }
+        graph.isCyclic(Algorithm.KAHN);
+        graph.topologicalSort(Algorithm.DFS);
     }
 
     private static void analyzeGraph9() {
-        Graph graph = new Graph(6);
+        Graph2 graph = new Graph2(6, Type.DIRECTED);
 
-        // Adjacency List Presentation
+        // Adjacency List Representation
         // ----------------------------
-        // [0] -> 1 -> NULL
+        // [0] -> 1(1) -> NULL
         // [1] -> NULL
-        // [2] -> 1 -> 3 -> NULL
-        // [3] -> 4 -> NULL
-        // [4] -> 5 -> NULL
-        // [5] -> 2 -> NULL
+        // [2] -> 3(1) -> 1(1) -> NULL
+        // [3] -> 4(1) -> NULL
+        // [4] -> 5(1) -> NULL
+        // [5] -> 2(1) -> NULL
 
         graph.addEdge(0, 1);
         graph.addEdge(2, 3);
@@ -246,26 +241,23 @@ public class Graph2Test {
         graph.addEdge(3, 4);
         graph.addEdge(4, 5);
         graph.addEdge(5, 2);
-        graph.display();
 
-        CycleNode node = null;
-        if (null != (node = graph.isCycleDetectedDirected())) {
-            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
-        } else {
-            System.out.println("NO Cycle Detected");
-        }
+        graph.display();
+        graph.isCyclic(Algorithm.KAHN);
+        graph.topologicalSort(Algorithm.DFS);
     }
 
     private static void analyzeGraph10() {
-        Graph graph = new Graph(6);
+        Graph2 graph = new Graph2(6, Type.DIRECTED);
 
         // Adjacency List Presentation
         // ----------------------------
-        // [0] -> 1 -> NULL
-        // [2] -> 1 -> 3 -> NULL
-        // [3] -> 4 -> NULL
-        // [4] -> 5 -> NULL
-        // [5] -> 1 -> NULL
+        // [0] -> 1(1) -> NULL
+        // [1] -> NULL
+        // [2] -> 1(1) -> 3(1) -> NULL
+        // [3] -> 4(1) -> NULL
+        // [4] -> 5(1) -> NULL
+        // [5] -> 1(1) -> NULL
 
         graph.addEdge(0, 1);
         graph.addEdge(2, 1);
@@ -273,72 +265,45 @@ public class Graph2Test {
         graph.addEdge(3, 4);
         graph.addEdge(4, 5);
         graph.addEdge(5, 1);
-        graph.display();
 
-        CycleNode node = null;
-        if (null != (node = graph.isCycleDetectedDirected())) {
-            System.out.println("Cycle Detected between " + node.currentNode + " and " + node.parentNode);
-        } else {
-            System.out.println("NO Cycle Detected");
-        }
+        graph.display();
+        graph.isCyclic(Algorithm.KAHN);
+
+        graph.topologicalSort(Algorithm.DFS);
+        graph.topologicalSort(Algorithm.KAHN);
     }
 
     private static void analyzeGraph11() {
-        Graph graph = new Graph(6);
-
-        graph.addEdge(0, 1);
-        graph.addEdge(2, 1);
-        graph.addEdge(2, 3);
-        graph.addEdge(3, 4);
-        graph.addEdge(4, 5);
-        graph.addEdge(5, 1);
-
-        graph.display();
-
-        CycleNode node = null;
-        if (null != (node = graph.isCycleDetectedDirected())) {
-            System.out.println("Directed: Cycle Detected between " + node.currentNode + " and " + node.parentNode);
-        } else {
-            System.out.println("Directed: NO Cycle Detected");
-        }
-
-        if (graph.isCycleDetectedUndirected()) {
-            System.out.println("Undirected: Cycle Detected");
-        } else {
-            System.out.println("Undirected: NO Cycle Detected");
-        }
-    }
-
-    private static void analyzeGraph12() {
         // Adjacency List Presentation
         // ----------------------------
-        // [0] -> 3 -> 2 -> NULL
-        // [1] -> 4 -> 3 -> NULL
+        // [0] -> 2(1) -> 3(1) -> NULL
+        // [1] -> 3(1) -> 4(1) -> NULL
         // [2] -> NULL
         // [3] -> NULL
         // [4] -> NULL
 
-        Graph graph = new Graph(5);
+        Graph2 graph = new Graph2(5, Type.DIRECTED);
         graph.addEdge(0, 2);
         graph.addEdge(0, 3);
         graph.addEdge(1, 3);
         graph.addEdge(1, 4);
 
         graph.display();
-        graph.topologicalSort();
+        graph.topologicalSort(Algorithm.DFS);
+        graph.topologicalSort(Algorithm.KAHN);
     }
 
-    private static void analyzeGraph13() {
+    private static void analyzeGraph12() {
         // Adjacency List Presentation
         // ----------------------------
-        // [0] -> 2 -> 1 -> NULL
-        // [1] -> 3 -> NULL
-        // [2] -> 3 -> NULL
-        // [3] -> 5 -> 4 -> NULL
+        // [0] -> 1(1) -> 2(1) -> NULL
+        // [1] -> 3(1) -> NULL
+        // [2] -> 3(1) -> NULL
+        // [3] -> 4(1) -> 5(1) -> NULL
         // [4] -> NULL
         // [5] -> NULL
 
-        Graph graph = new Graph(6);
+        Graph2 graph = new Graph2(6, Type.DIRECTED);
         graph.addEdge(0, 1);
         graph.addEdge(0, 2);
         graph.addEdge(1, 3);
@@ -347,8 +312,33 @@ public class Graph2Test {
         graph.addEdge(3, 5);
 
         graph.display();
-        graph.topologicalSort();
-        graph.unitShortestDistance(0);
+        graph.topologicalSort(Algorithm.DFS);
+        graph.shortestDistance(0, Algorithm.BFS);
+    }
+
+    private static void analyzeGraph13() {
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 4(1) -> 1(2) -> NULL
+        // [1] -> 2(3) -> NULL
+        // [2] -> 3(6) -> NULL
+        // [3] -> NULL
+        // [4] -> 5(4) -> 2(2) -> NULL
+        // [5] -> 3(1) -> NULL
+
+        Graph2 graph = new Graph2(6, Type.DIRECTED);
+        graph.addEdge(0, 1, 2);
+        graph.addEdge(0, 4, 1);
+        graph.addEdge(1, 2, 3);
+        graph.addEdge(2, 3, 6);
+        graph.addEdge(4, 2, 2);
+        graph.addEdge(4, 5, 4);
+        graph.addEdge(5, 3, 1);
+
+        graph.display();
+        graph.topologicalSort(Algorithm.DFS);
+        graph.shortestDistance(0, Algorithm.BFS);
+        graph.shortestDistance(1, Algorithm.BFS);
     }
 
     private static void analyzeGraph14() {
@@ -361,32 +351,7 @@ public class Graph2Test {
         // [4] -> 5(4) -> 2(2) -> NULL
         // [5] -> 3(1) -> NULL
 
-        Graph graph = new Graph(6);
-        graph.addEdge(0, 1, 2);
-        graph.addEdge(0, 4, 1);
-        graph.addEdge(1, 2, 3);
-        graph.addEdge(2, 3, 6);
-        graph.addEdge(4, 2, 2);
-        graph.addEdge(4, 5, 4);
-        graph.addEdge(5, 3, 1);
-
-        graph.display();
-//        graph.topologicalSort();
-//        graph.nonUnitShortestDistance(0);
-        graph.topoShortestDistance(0);
-    }
-
-    private static void analyzeGraph15() {
-        // Adjacency List Presentation
-        // ----------------------------
-        // [0] -> 4(1) -> 1(2) -> NULL
-        // [1] -> 2(3) -> NULL
-        // [2] -> 3(6) -> NULL
-        // [3] -> NULL
-        // [4] -> 5(4) -> 2(2) -> NULL
-        // [5] -> 3(1) -> NULL
-
-        Graph graph = new Graph(7);
+        Graph2 graph = new Graph2(7, Type.DIRECTED);
         graph.addEdge(0, 1, 10);
         graph.addEdge(0, 5, 1);
         graph.addEdge(1, 2, 20);
@@ -396,8 +361,8 @@ public class Graph2Test {
         graph.addEdge(6, 1, 1);
 
         graph.display();
-        graph.topologicalSort();
-        graph.nonUnitShortestDistance(0);
+        graph.topologicalSort(Algorithm.DFS);
+        graph.shortestDistance(0, Algorithm.BFS);
     }
 
     public static void main(String[] args) {
@@ -407,14 +372,13 @@ public class Graph2Test {
         // analyzeGraph4();
         // analyzeGraph5();
         // analyzeGraph6();
-        analyzeGraph7();
+        // analyzeGraph7();
         // analyzeGraph8();
         // analyzeGraph9();
         // analyzeGraph10();
-        // analyzeGraph11();
+        analyzeGraph11();
         // analyzeGraph12();
         // analyzeGraph13();
         // analyzeGraph14();
-        // analyzeGraph15();
     }
 }
