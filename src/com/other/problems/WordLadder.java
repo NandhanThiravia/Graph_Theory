@@ -1,4 +1,4 @@
-package com.word.ladder;
+package com.other.problems;
 
 import java.util.HashSet;
 import java.util.Iterator;
