@@ -314,6 +314,8 @@ public class Graph2Test {
         graph.display();
         graph.topologicalSort(Algorithm.DFS);
         graph.shortestDistance(0, Algorithm.BFS);
+
+        graph.countOfPath(0, 3);
     }
 
     private static void analyzeGraph13() {
@@ -386,7 +388,7 @@ public class Graph2Test {
         graph.addEdge(6, 7);
 
         graph.display();
-        
+
         graph.displayLevel(0, 7);
     }
 
@@ -402,9 +404,9 @@ public class Graph2Test {
         // analyzeGraph9();
         // analyzeGraph10();
         // analyzeGraph11();
-        // analyzeGraph12();
+        analyzeGraph12();
         // analyzeGraph13();
         // analyzeGraph14();
-        analyzeGraph15();
+        // analyzeGraph15();
     }
 }

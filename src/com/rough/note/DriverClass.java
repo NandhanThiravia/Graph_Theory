@@ -1,80 +1,102 @@
 package com.rough.note;
 
-// { Driver Code Starts
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+//{ Driver Code Starts
+//Initial Template for Java
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
+
+class Graph {
+    int size;
+
+    Graph(int V) {
+        this.size = V;
+    }
+
+    Graph() {
+    }
+
+    static void addEdge(ArrayList<ArrayList<Integer>> list, int u, int v) {
+        list.get(u).add(v);
+        // list.get(v).add(u);
+    }
+}
 
 class DriverClass {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
+    public static void main(String[] args) throws IOException {
+        // Scanner sc = new Scanner(System.in);
+        // int t = sc.nextInt();
+
+        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
+        int t = Integer.parseInt(read.readLine());
 
         while (t-- > 0) {
             ArrayList<ArrayList<Integer>> list = new ArrayList<>();
-            int nov = sc.nextInt();
-            int edg = sc.nextInt();
+            String str[] = read.readLine().trim().split(" ");
+            int nov = Integer.parseInt(str[0]);
+            int edg = Integer.parseInt(str[1]);
 
-            for (int i = 0; i < nov; i++)
+            // int nov = sc.nextInt();
+            // int edg = sc.nextInt();
+
+            new Graph(nov);
+            for (int i = 0; i < nov + 1; i++)
                 list.add(i, new ArrayList<Integer>());
 
+            str = read.readLine().trim().split(" ");
+            int k = 0;
             for (int i = 1; i <= edg; i++) {
-                int u = sc.nextInt();
-                int v = sc.nextInt();
-                list.get(u).add(v);
-                list.get(v).add(u);
+                int u = Integer.parseInt(str[k++]);
+                int v = Integer.parseInt(str[k++]);
+                new Graph().addEdge(list, u, v);
             }
-            int x = sc.nextInt();
-            if (x >= nov)
-                System.out.println("-1");
-            else
-                System.out.println(new Level_of_Nodes().levels(list, 0, x));
+            str = read.readLine().trim().split(" ");
+            int s = Integer.parseInt(str[0]);
+            int d = Integer.parseInt(str[1]);
+            System.out.println(new Path().countPaths(list, s, d));
         }
     }
-}// } Driver Code Ends
+}
+//} Driver Code Ends
+
+//User function Template for Java
 
 /*
- * ArrayList<ArrayList<Integer>> list: to represent graph containing vertices
- * and edges between them x: starting vertex of graph in: represent vertex whose
- * level we have to find
+ * g : Adjacency list of the graph s : source node d : destination node
  */
-class Level_of_Nodes {
 
-    static int levels(ArrayList<ArrayList<Integer>> list, int x, int in) {
-        int levelOfDestination = -1;
-        int destinationVertex = in;
+class Path {
+    static int countPaths(ArrayList<ArrayList<Integer>> g, int s, int d) {
+        int source = s;
+        int destination = d;
 
-        int startVertex = x;
-        Queue<Integer> levelQueue = new LinkedList<Integer>();
+        int countOfPath = 0;
         Queue<Integer> queue = new LinkedList<Integer>();
-        boolean isVisited[] = new boolean[list.size()];
+        queue.add(source);
 
-        queue.add(startVertex);
-        levelQueue.add(startVertex);
-        isVisited[startVertex] = true;
+        if (source == destination) {
+            countOfPath = 1;
+        }
 
-        // System.out.println("Destination Vertex: " + destinationVertex);
         while (!queue.isEmpty()) {
             int vertex = queue.poll();
-            int level = levelQueue.poll();
 
-            // System.out.println("Vertex: " + vertex + " Level: " + level);
-            if (vertex == destinationVertex) {
-                levelOfDestination = level;
-                break;
-            }
-
-            ArrayList<Integer> neighbourList = list.get(vertex);
-            for (int index = 0; index < neighbourList.size(); ++index) {
-                int neighbour = neighbourList.get(index);
-                if (!isVisited[neighbour]) {
-                    isVisited[neighbour] = true;
+            ArrayList<Integer> neighbourList = g.get(vertex);
+            for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                int neighbour = neighbourList.get(neighbourIndex);
+                if (neighbour != destination) {
                     queue.add(neighbour);
-                    levelQueue.add(level + 1);
+                } else {
+                    countOfPath += 1;
                 }
             }
         }
-        return levelOfDestination;
+
+        // System.out.println("Number of Path from " + source + " to " + destination + "
+        // are " + countOfPath);
+        return countOfPath;
     }
 }

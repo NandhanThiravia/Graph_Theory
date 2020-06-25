@@ -1,6 +1,5 @@
 package com.adjacency.list;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -87,12 +86,12 @@ public class Graph2 {
         levelQueue.add(startVertex);
         isVisited[startVertex] = true;
 
-        //System.out.println("Destination Vertex: " + destinationVertex);
+        // System.out.println("Destination Vertex: " + destinationVertex);
         while (!queue.isEmpty()) {
             int vertex = queue.poll();
             int level = levelQueue.poll();
 
-            //System.out.println("Vertex: " + vertex + " Level: " + level);
+            // System.out.println("Vertex: " + vertex + " Level: " + level);
             if (vertex == destinationVertex) {
                 levelOfDestination = level;
                 break;
@@ -381,6 +380,7 @@ public class Graph2 {
                 System.out.println(index + ": " + distance[index]);
             }
         }
+        System.out.println();
         return;
     }
 
@@ -585,5 +585,28 @@ public class Graph2 {
         System.out.println();
         System.out.println("There is " + status + " path from " + source + " to " + destination);
         return hasPath;
+    }
+
+    public int countOfPath(int source, int destination) {
+        int countOfPath = 0;
+        Queue<Integer> queue = new LinkedList<Integer>();
+        queue.add(source);
+
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+
+            ArrayList<Vertex> neighbourList = mAdjacencyList.get(vertex);
+            for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                int neighbour = neighbourList.get(neighbourIndex).value;
+                if (neighbour != destination) {
+                    queue.add(neighbour);
+                } else {
+                    countOfPath += 1;
+                }
+            }
+        }
+
+        System.out.println("Number of Path from " + source + " to " + destination + " are " + countOfPath);
+        return countOfPath;
     }
 }
