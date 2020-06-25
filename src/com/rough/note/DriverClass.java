@@ -1,10 +1,10 @@
 package com.rough.note;
 
 // { Driver Code Starts
-// Initial Template for Java
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
-import java.util.Stack;
 
 class DriverClass {
     public static void main(String[] args) {
@@ -12,61 +12,69 @@ class DriverClass {
         int t = sc.nextInt();
 
         while (t-- > 0) {
-            int N = sc.nextInt();
-            int M = sc.nextInt();
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+            int nov = sc.nextInt();
+            int edg = sc.nextInt();
 
-            ArrayList<ArrayList<Integer>> list = new ArrayList<>(N);
+            for (int i = 0; i < nov; i++)
+                list.add(i, new ArrayList<Integer>());
 
-            // creating arraylist of arraylist
-            for (int i = 0; i < N; i++) {
-                ArrayList<Integer> temp = new ArrayList<>(M);
-                list.add(i, temp);
+            for (int i = 1; i <= edg; i++) {
+                int u = sc.nextInt();
+                int v = sc.nextInt();
+                list.get(u).add(v);
+                list.get(v).add(u);
             }
-
-            // adding elements to the arraylist of arraylist
-            for (int i = 0; i < N; i++) {
-                for (int j = 0; j < M; j++) {
-                    int val = sc.nextInt();
-                    list.get(i).add(j, val);
-                }
-            }
-
-            System.out.println(new Islands().findIslands(list, N, M));
+            int x = sc.nextInt();
+            if (x >= nov)
+                System.out.println("-1");
+            else
+                System.out.println(new Level_of_Nodes().levels(list, 0, x));
         }
     }
-}
-// } Driver Code Ends
+}// } Driver Code Ends
 
-// User function Template for Java
+/*
+ * ArrayList<ArrayList<Integer>> list: to represent graph containing vertices
+ * and edges between them x: starting vertex of graph in: represent vertex whose
+ * level we have to find
+ */
+class Level_of_Nodes {
 
-class Islands {
+    static int levels(ArrayList<ArrayList<Integer>> list, int x, int in) {
+        int levelOfDestination = -1;
+        int destinationVertex = in;
 
-    // Function to find the number of island in the given list
-    // N, M: size of list row and column respectively
-    static int findIslands(ArrayList<ArrayList<Integer>> list, int N, int M) {
-        boolean isVisited[] = new boolean[N];
-        Stack<Integer> stack = new Stack<Integer>();
+        int startVertex = x;
+        Queue<Integer> levelQueue = new LinkedList<Integer>();
+        Queue<Integer> queue = new LinkedList<Integer>();
+        boolean isVisited[] = new boolean[list.size()];
 
-        int islands = 0;
-        for (int index = 0; index < N; ++index) {
-            if (!isVisited[index]) {
-                isVisited[index] = true;
-                stack.add(index);
-                ++islands;
+        queue.add(startVertex);
+        levelQueue.add(startVertex);
+        isVisited[startVertex] = true;
 
-                while (!stack.isEmpty()) {
-                    int vertex = stack.pop();
+        // System.out.println("Destination Vertex: " + destinationVertex);
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            int level = levelQueue.poll();
 
-                    ArrayList<Integer> innerList = list.get(vertex);
-                    for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
-                        if (!isVisited[innerList.get(innerIndex)]) {
-                            isVisited[innerList.get(innerIndex)] = true;
-                            stack.add(innerList.get(innerIndex));
-                        }
-                    }
+            // System.out.println("Vertex: " + vertex + " Level: " + level);
+            if (vertex == destinationVertex) {
+                levelOfDestination = level;
+                break;
+            }
+
+            ArrayList<Integer> neighbourList = list.get(vertex);
+            for (int index = 0; index < neighbourList.size(); ++index) {
+                int neighbour = neighbourList.get(index);
+                if (!isVisited[neighbour]) {
+                    isVisited[neighbour] = true;
+                    queue.add(neighbour);
+                    levelQueue.add(level + 1);
                 }
             }
         }
-        return islands;
+        return levelOfDestination;
     }
 }

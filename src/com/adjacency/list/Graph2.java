@@ -1,5 +1,6 @@
 package com.adjacency.list;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -73,6 +74,41 @@ public class Graph2 {
             System.out.println("NULL");
         }
         System.out.println();
+    }
+
+    public void displayLevel(int startVertex, int destinationVertex) {
+        int levelOfDestination = -1;
+
+        Queue<Integer> levelQueue = new LinkedList<Integer>();
+        Queue<Integer> queue = new LinkedList<Integer>();
+        boolean isVisited[] = new boolean[mTotalVertex];
+
+        queue.add(startVertex);
+        levelQueue.add(startVertex);
+        isVisited[startVertex] = true;
+
+        //System.out.println("Destination Vertex: " + destinationVertex);
+        while (!queue.isEmpty()) {
+            int vertex = queue.poll();
+            int level = levelQueue.poll();
+
+            //System.out.println("Vertex: " + vertex + " Level: " + level);
+            if (vertex == destinationVertex) {
+                levelOfDestination = level;
+                break;
+            }
+
+            ArrayList<Vertex> neighbourList = mAdjacencyList.get(vertex);
+            for (int index = 0; index < neighbourList.size(); ++index) {
+                int neighbour = neighbourList.get(index).value;
+                if (!isVisited[neighbour]) {
+                    isVisited[neighbour] = true;
+                    queue.add(neighbour);
+                    levelQueue.add(level + 1);
+                }
+            }
+        }
+        System.out.println(levelOfDestination);
     }
 
     /**

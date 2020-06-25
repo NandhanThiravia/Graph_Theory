@@ -365,6 +365,31 @@ public class Graph2Test {
         graph.shortestDistance(0, Algorithm.BFS);
     }
 
+    private static void analyzeGraph15() {
+        // Adjacency List Presentation
+        // ----------------------------
+        // [0] -> 1(1) -> 2(1) -> NULL
+        // [1] -> 0(1) -> 3(1) -> 4(1) -> 5(1) -> NULL
+        // [2] -> 0(1) -> 6(1) -> NULL
+        // [3] -> 1(1) -> NULL
+        // [4] -> 1(1) -> NULL
+        // [5] -> 1(1) -> NULL
+        // [6] -> 2(1) -> 7(1) -> NULL
+        // [7] -> 6(1) -> NULL
+        Graph2 graph = new Graph2(8, Type.UNDIRECTED);
+        graph.addEdge(0, 1);
+        graph.addEdge(0, 2);
+        graph.addEdge(1, 3);
+        graph.addEdge(1, 4);
+        graph.addEdge(1, 5);
+        graph.addEdge(2, 6);
+        graph.addEdge(6, 7);
+
+        graph.display();
+        
+        graph.displayLevel(0, 7);
+    }
+
     public static void main(String[] args) {
         // analyzeGraph1();
         // analyzeGraph2();
@@ -376,9 +401,10 @@ public class Graph2Test {
         // analyzeGraph8();
         // analyzeGraph9();
         // analyzeGraph10();
-        analyzeGraph11();
+        // analyzeGraph11();
         // analyzeGraph12();
         // analyzeGraph13();
         // analyzeGraph14();
+        analyzeGraph15();
     }
 }

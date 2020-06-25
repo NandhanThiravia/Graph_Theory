@@ -15,3 +15,5 @@ Graph2 Class: It is based on built-in ArrayList Class. Looks simpler than Graph 
 9. Cycle Detection in Directed Graph. [Graph2.isKahnDirectedCyclic | Graph.isCycleDetectedDirected]
 10. Path Detection Algorithm. [Graph2.hasPath]
 11. Find Islands in a Array Matrix. [Islands.findIslands]
+12. Find Level of a Given Node. [Graph2.displayLevel]
+13. Find Path between 2 nodes. [PathFinder]

@@ -15,10 +15,11 @@ public class RoughNote {
     }
 
     public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(1);
-        list.add(2);
-        System.out.println();
+        int rate = 48000;
+        System.out.println(Integer.toHexString((rate >> 0) & 0xFF));
+        System.out.println(Integer.toHexString((rate >> 8) & 0xFF));
+        System.out.println(Integer.toHexString((rate >> 16) & 0xFF));
+        System.out.println(Integer.toHexString((rate >> 24) & 0xFF));
     }
 
     private void testArray() {
