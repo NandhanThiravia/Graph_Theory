@@ -120,19 +120,19 @@ class Islands {
         return islands;
     }
 
-    /**
-     * Sample Input:
-     * 2
-     * 3 3
-     * 1 1 0 0 0 1 1 0 1
-     * 4 4
-     * 1 1 0 0 0 0 1 0 0 0 0 1 0 1 0 0
-     * 
-     * Output:
-     * 2
-     * 2
-     * @param args
-     */
+    // Sample Input:
+    // --------------
+    // 2
+    // 3 3
+    // 1 1 0 0 0 1 1 0 1
+    // 4 4
+    // 1 1 0 0 0 0 1 0 0 0 0 1 0 1 0 0
+    //
+    // Output:
+    // --------
+    // 2
+    // 2
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int t = sc.nextInt();

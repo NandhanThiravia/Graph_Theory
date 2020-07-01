@@ -14,12 +14,23 @@ public class RoughNote {
         }
     }
 
+    private static void change(int matrix[][]) {
+        matrix[0][0] = 30;
+    }
+
     public static void main(String[] args) {
-        int rate = 48000;
-        System.out.println(Integer.toHexString((rate >> 0) & 0xFF));
-        System.out.println(Integer.toHexString((rate >> 8) & 0xFF));
-        System.out.println(Integer.toHexString((rate >> 16) & 0xFF));
-        System.out.println(Integer.toHexString((rate >> 24) & 0xFF));
+        ArrayList<ArrayList<Integer>> matrix = new ArrayList<ArrayList<Integer>>();
+        matrix.add(new ArrayList<Integer>());
+        matrix.add(new ArrayList<Integer>());
+        matrix.add(new ArrayList<Integer>());
+        matrix.add(new ArrayList<Integer>());
+        matrix.add(new ArrayList<Integer>());
+        System.out.println("Length: " + matrix.size());
+
+        ArrayList<Integer> list = matrix.get(0);
+        list.add(20);
+        System.out.println(list.get(0));
+        System.out.println(matrix.get(0).get(0));
     }
 
     private void testArray() {

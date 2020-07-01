@@ -6,10 +6,18 @@ import java.io.InputStreamReader;
 import java.util.Stack;
 
 public class Grouping {
-    /*
-     * Sample Input ------------ 2 4 7 OOOOXXO OXOXOOX XXXXOXO OXXXOOO 10 3 XXO OOX
-     * OXO OOO XOX XOX OXO XXO XXX OOO
-     */
+    // Sample Input
+    // ------------
+    // 2
+    // 4 7
+    // OOOOXXO OXOXOOX XXXXOXO OXXXOOO
+    // 10 3
+    // XXO OOX OXO OOO XOX XOX OXO XXO XXX OOO
+    //
+    // Output:
+    // ---------
+    // 4
+    // 6
     public static void main(String[] args) throws IOException {
         // Scanner sc = new Scanner(System.in);
         // int t = sc.nextInt();
