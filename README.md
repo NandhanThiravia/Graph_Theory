@@ -20,3 +20,4 @@ Graph2 Class: It is based on built-in ArrayList Class. Looks simpler than Graph 
 14. Find number of groups. [Grouping]
 15. Find number of paths between 2 nodes [Graph2.countOfPath]
 16. Find distance of each coordinate from nearest 1's. [Distance]
+17. Find Mother Vertex in a Directed Graph. [MotherVertex]
