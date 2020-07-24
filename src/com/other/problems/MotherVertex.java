@@ -14,32 +14,60 @@ class MotherVertex {
     int findMother(ArrayList<ArrayList<Integer>> list, int vertexCount) {
         Stack<Integer> stack = new Stack<Integer>();
 
+        boolean[] isVisited = new boolean[vertexCount];
+        int motherVertex = -1;
+
         for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex) {
-            boolean[] isVisited = new boolean[vertexCount];
-            int visitedCount = 0;
-            
-            stack.push(vertexIndex);
-            isVisited[vertexIndex] = true;
-            ++visitedCount;
+            if (!isVisited[vertexIndex]) {
+                stack.push(vertexIndex);
+                isVisited[vertexIndex] = true;
+                motherVertex = vertexIndex;
 
-            while (!stack.isEmpty()) {
-                int vertex = stack.pop();
+                while (!stack.isEmpty()) {
+                    int vertex = stack.pop();
 
-                ArrayList<Integer> neighbourList = list.get(vertex);
-                for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
-                    if (!isVisited[neighbourList.get(neighbourIndex)]) {
-                        isVisited[neighbourList.get(neighbourIndex)] = true;
-                        stack.add(neighbourList.get(neighbourIndex));
-                        ++visitedCount;
+                    ArrayList<Integer> neighbourList = list.get(vertex);
+                    for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                        if (!isVisited[neighbourList.get(neighbourIndex)]) {
+                            isVisited[neighbourList.get(neighbourIndex)] = true;
+                            stack.add(neighbourList.get(neighbourIndex));
+                        }
                     }
                 }
             }
 
-            if (visitedCount == vertexCount) {
-                return vertexIndex;
+        }
+
+        // Reset the variables
+        stack.clear();
+        for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex) {
+            isVisited[vertexIndex] = false;
+        }
+
+        // Check if MotherVertex variable really contains the MotherVertex
+        isVisited[motherVertex] = true;
+        stack.push(motherVertex);
+        while (!stack.isEmpty()) {
+            int vertex = stack.pop();
+
+            ArrayList<Integer> neighbourList = list.get(vertex);
+            for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                if (!isVisited[neighbourList.get(neighbourIndex)]) {
+                    isVisited[neighbourList.get(neighbourIndex)] = true;
+                    stack.add(neighbourList.get(neighbourIndex));
+                }
             }
         }
-        return -1;
+        
+        // If there exists any Non Visited Node then this is not a Mother Vertex and hence return -1
+        for (int vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex) {
+            if (!isVisited[vertexIndex]) {
+                return -1;
+            }
+                
+        }
+
+        return motherVertex;
     }
 
     public static void main(String[] args) throws IOException {
