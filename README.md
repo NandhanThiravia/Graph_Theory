@@ -23,3 +23,5 @@ Graph2 Class: It is based on built-in ArrayList Class. Looks simpler than Graph 
 17. Find Mother Vertex in a Directed Graph. [MotherVertex]
 18. Algorithm to find the Largest Unit Area in a Matrix containing 1s and 0s. [Area]
 19. Algorithm to find the Time taken for the Fresh Oranges to Rot. [RottenOranges]
+20. Algorithm to find the Minimum number of swaps required to sort the Array. [MinSwapToSort]
+21. Algorithm to find shortest path for a Knight to reach Target in a Chess Board. [KnightProblem]
