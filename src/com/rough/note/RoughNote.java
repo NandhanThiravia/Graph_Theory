@@ -18,7 +18,7 @@ public class RoughNote {
         matrix[0][0] = 30;
     }
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         ArrayList<ArrayList<Integer>> matrix = new ArrayList<ArrayList<Integer>>();
         matrix.add(new ArrayList<Integer>());
         matrix.add(new ArrayList<Integer>());
@@ -31,6 +31,26 @@ public class RoughNote {
         list.add(20);
         System.out.println(list.get(0));
         System.out.println(matrix.get(0).get(0));
+    }
+
+    public static void main(String[] args) {
+        int years = 21;
+        int premiumPerMonth = 5000;
+        int premiumPerYear = premiumPerMonth * 12;
+        double total = 0;
+
+        int cpremiumPerYear = premiumPerYear;
+        for (int counter = 0; counter < years; ++counter) {
+            if (counter == 15) {
+                cpremiumPerYear = 0;
+            }
+            total = ((total + cpremiumPerYear) * 1.085);
+        }
+
+        System.out.println("Premium per month: Rs. " + (premiumPerYear / 12));
+        System.out.println("Premium per year: Rs. " + premiumPerYear);
+        System.out.println("Total Premium Paid: Rs. " + (premiumPerYear * 15));
+        System.out.println("Final Returns: Rs." + total);
     }
 
     private void testArray() {
