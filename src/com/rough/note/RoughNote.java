@@ -33,7 +33,7 @@ public class RoughNote {
         System.out.println(matrix.get(0).get(0));
     }
 
-    public static void main(String[] args) {
+    public static void main3(String[] args) {
         int years = 21;
         int premiumPerMonth = 5000;
         int premiumPerYear = premiumPerMonth * 12;
@@ -51,6 +51,19 @@ public class RoughNote {
         System.out.println("Premium per year: Rs. " + premiumPerYear);
         System.out.println("Total Premium Paid: Rs. " + (premiumPerYear * 15));
         System.out.println("Final Returns: Rs." + total);
+    }
+    
+    public static void main(String[] args) {
+        ArrayList<Integer> inMSTList = new ArrayList<Integer>();
+        ArrayList<Integer> outMSTList = new ArrayList<Integer>();
+        inMSTList.add(0);
+        outMSTList.add(1);
+        outMSTList.add(2);
+        outMSTList.add(3);
+        outMSTList.add(4);
+        
+        outMSTList.remove(new Integer(1));
+        System.out.println(outMSTList);
     }
 
     private void testArray() {

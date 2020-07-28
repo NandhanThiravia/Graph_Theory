@@ -1,7 +1,10 @@
 package com.adjacency.list;
 
+import java.util.ArrayList;
+
 import com.adjacency.list.Graph2.Algorithm;
 import com.adjacency.list.Graph2.Type;
+import com.adjacency.list.Graph2.Vertex;
 
 public class Graph2Test {
     private static void analyzeGraph1() {
@@ -392,6 +395,35 @@ public class Graph2Test {
         graph.displayLevel(0, 7);
     }
 
+    private static void analyzeGraph16() {
+        int numberOfVertices = 7;
+        Graph2 graph = new Graph2(numberOfVertices, Type.UNDIRECTED);
+        graph.addEdge(0, 1, 2);
+        graph.addEdge(0, 2, 5);
+        graph.addEdge(1, 3, 1);
+        graph.addEdge(1, 4, 9);
+        graph.addEdge(2, 5, 3);
+        graph.addEdge(2, 3, 7);
+        graph.addEdge(3, 4, 4);
+        graph.addEdge(3, 6, 8);
+        graph.addEdge(5, 6, 6);
+
+        graph.display();
+
+        ArrayList<ArrayList<Vertex>> minSpanningTree = graph.minSpanningTree(0);
+        System.out.println("Minimum Spanning Tree Representation");
+        System.out.println("--------------------------------------");
+        for (int index = 0; index < numberOfVertices; index++) {
+            System.out.print("[" + index + "] -> ");
+            ArrayList<Vertex> innerList = minSpanningTree.get(index);
+            for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                System.out.print(innerList.get(innerIndex).value + "(" + innerList.get(innerIndex).distance + ")" + " -> ");
+            }
+            System.out.println("NULL");
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
         // analyzeGraph1();
         // analyzeGraph2();
@@ -404,9 +436,10 @@ public class Graph2Test {
         // analyzeGraph9();
         // analyzeGraph10();
         // analyzeGraph11();
-        analyzeGraph12();
+        // analyzeGraph12();
         // analyzeGraph13();
         // analyzeGraph14();
         // analyzeGraph15();
+        analyzeGraph16();
     }
 }

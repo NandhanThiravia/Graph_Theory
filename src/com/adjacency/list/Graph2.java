@@ -223,8 +223,7 @@ public class Graph2 {
     }
 
     /**
-     * Displays the Topological Sort of a Directed Graph But it fails to work, if
-     * there is a Cycle in the Graph
+     * Displays the Topological Sort of a Directed Graph But it fails to work, if there is a Cycle in the Graph
      */
     private void topologicalSortDFS() {
         boolean isVisited[] = new boolean[mTotalVertex];
@@ -335,13 +334,10 @@ public class Graph2 {
     }
 
     /**
-     * To find the Shortest Distance from a source vertex to other nodes, Breadth
-     * First Search is the best way. Breadth First Search will put nearby neighbours
-     * first to queue thereby marking the distance as 1 and its neighbours as
-     * distance + 1 The same would happen to their first neighbours.
+     * To find the Shortest Distance from a source vertex to other nodes, Breadth First Search is the best way. Breadth First Search will put nearby neighbours first to queue thereby marking the
+     * distance as 1 and its neighbours as distance + 1 The same would happen to their first neighbours.
      *
-     * Shortest Distance Algorithm would not work with DFS Algorithm, because of the
-     * way it operates and the way isVisited boolean array is utilized.
+     * Shortest Distance Algorithm would not work with DFS Algorithm, because of the way it operates and the way isVisited boolean array is utilized.
      *
      * @param sourceVertex
      */
@@ -608,5 +604,47 @@ public class Graph2 {
 
         System.out.println("Number of Path from " + source + " to " + destination + " are " + countOfPath);
         return countOfPath;
+    }
+
+    public ArrayList<ArrayList<Vertex>> minSpanningTree(int sourceVertex) {
+        ArrayList<ArrayList<Vertex>> minSpanningTree = new ArrayList<ArrayList<Vertex>>();
+        ArrayList<Integer> inMSTList = new ArrayList<Integer>();
+        ArrayList<Integer> outMSTList = new ArrayList<Integer>();
+
+        boolean isVisited[] = new boolean[mTotalVertex];
+        inMSTList.add(sourceVertex);
+        for (int vertex = 0; vertex < mTotalVertex; ++vertex) {
+            if (vertex != sourceVertex) {
+                outMSTList.add(vertex);
+            }
+            minSpanningTree.add(new ArrayList<Vertex>());
+        }
+        isVisited[sourceVertex] = true;
+
+        while (!outMSTList.isEmpty()) {
+            int fromVertex = -1;
+            int nearestNeighbour = -1;
+            int nearesetNeighbourDistance = Integer.MAX_VALUE;
+            int inMSTVertex = -1;
+            for (int vertexIndex = 0; vertexIndex < inMSTList.size(); ++vertexIndex) {
+                inMSTVertex = inMSTList.get(vertexIndex);
+                ArrayList<Vertex> neighbourList = mAdjacencyList.get(inMSTVertex);
+                for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                    Vertex neighbourVertex = neighbourList.get(neighbourIndex);
+                    if (!isVisited[neighbourVertex.value] && neighbourVertex.distance < nearesetNeighbourDistance) {
+                        nearesetNeighbourDistance = neighbourVertex.distance;
+                        nearestNeighbour = neighbourVertex.value;
+                        fromVertex = inMSTVertex;
+                    }
+                }
+            }
+            minSpanningTree.get(fromVertex).add(new Vertex(nearestNeighbour, nearesetNeighbourDistance));
+            minSpanningTree.get(nearestNeighbour).add(new Vertex(fromVertex, nearesetNeighbourDistance));
+            isVisited[nearestNeighbour] = true;
+            inMSTList.add(nearestNeighbour);
+            outMSTList.remove(new Integer(nearestNeighbour)); // Because removing an element taken Object as argument
+        }
+
+        return minSpanningTree;
     }
 }
