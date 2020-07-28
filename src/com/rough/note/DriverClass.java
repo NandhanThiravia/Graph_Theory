@@ -3,49 +3,49 @@ package com.rough.note;
 
 // Initial Template for Java
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+// { Driver Code Starts
+//Initial Template for Java
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class DriverClass {
+class DriverClass {
+    static void printSolution(int dist[], int n) {
+        for (int i = 0; i < n; i++)
+            System.out.print(dist[i] + " ");
+    }
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        int t = Integer.parseInt(sc.next());
 
-        BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-        int t = Integer.parseInt(read.readLine());
-        while (t-- > 0) {
-            String str[] = read.readLine().trim().split(" ");
-            int V = Integer.parseInt(str[0]);
-            int E = Integer.parseInt(str[1]);
-
-            ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        while (t > 0) {
+            int V = Integer.parseInt(sc.next());
+            ;
+            ArrayList<ArrayList<Integer>> list = new ArrayList<>(V);
             for (int i = 0; i < V; i++) {
-                ArrayList<Integer> temp = new ArrayList<>();
-                for (int j = 0; j < V; j++)
-                    temp.add(Integer.MAX_VALUE);
-                graph.add(temp);
-            }
-            str = read.readLine().trim().split(" ");
-            int k = 0;
-            int i = 0;
-            while (i++ < E) {
-                int u = Integer.parseInt(str[k++]);
-                int v = Integer.parseInt(str[k++]);
-                int w = Integer.parseInt(str[k++]);
-                u--;
-                v--;
-                graph.get(u).set(v, w);
-                graph.get(v).set(u, w);
+                ArrayList<Integer> temp = new ArrayList<>(V);
+                list.add(i, temp);
             }
 
-            System.out.println(new MST().spanningTree(V, E, graph));
+            for (int i = 0; i < V; i++) {
+                ArrayList<Integer> temp = list.get(i);
+                for (int j = 0; j < V; j++) {
+                    temp.add(Integer.parseInt(sc.next()));
+                }
+                list.add(temp);
+            }
+            int s = Integer.parseInt(sc.next());
+            ;
+            Solution T = new Solution();
+            int[] res = T.dijkstra(list, s, V);
+            printSolution(res, V);
+            System.out.println();
+            t--;
         }
     }
-}
-// } Driver Code Ends
+}// } Driver Code Ends
 
-// User function Template for Java
+//User function Template for Java
 
 class Graph {
     class Vertex {
@@ -55,6 +55,18 @@ class Graph {
         public Vertex(int value, int distance) {
             this.value = value;
             this.distance = distance;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Vertex))
+                return false;
+
+            Vertex vertex = (Vertex) obj;
+            if (vertex.value == this.value) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -71,68 +83,73 @@ class Graph {
     }
 
     public void addEdge(int from, int to, int distance) {
-        Vertex node = new Vertex(to, distance);
+        Vertex node = null;
+        node = new Vertex(to, distance);
         mAdjacencyList.get(from).add(node);
     }
 
-    public int minSpanningTree(int sourceVertex) {
-        int totalWeight = 0;
-        // ArrayList<ArrayList<Vertex>> minSpanningTree = new ArrayList<ArrayList<Vertex>>();
-        ArrayList<Integer> inMSTList = new ArrayList<Integer>();
-        ArrayList<Integer> outMSTList = new ArrayList<Integer>();
+    private int minVertexDistance(int[] distance, boolean[] isFinalized) {
+        int minIndex = -1;
+        int min = Integer.MAX_VALUE;
 
-        boolean isVisited[] = new boolean[mTotalVertex];
-        inMSTList.add(sourceVertex);
-        for (int vertex = 0; vertex < mTotalVertex; ++vertex) {
-            if (vertex != sourceVertex) {
-                outMSTList.add(vertex);
+        for (int index = 0; index < mTotalVertex; ++index) {
+            if (!isFinalized[index]) {
+                if (min > distance[index]) {
+                    min = distance[index];
+                    minIndex = index;
+                }
             }
-            // minSpanningTree.add(new ArrayList<Vertex>());
         }
-        isVisited[sourceVertex] = true;
+        return minIndex;
+    }
 
-        while (!outMSTList.isEmpty()) {
-            // int fromVertex = -1;
-            int nearestNeighbour = -1;
-            int nearesetNeighbourDistance = Integer.MAX_VALUE;
-            int inMSTVertex = -1;
-            for (int vertexIndex = 0; vertexIndex < inMSTList.size(); ++vertexIndex) {
-                inMSTVertex = inMSTList.get(vertexIndex);
-                ArrayList<Vertex> neighbourList = mAdjacencyList.get(inMSTVertex);
-                for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
-                    Vertex neighbourVertex = neighbourList.get(neighbourIndex);
-                    if (!isVisited[neighbourVertex.value] && neighbourVertex.distance < nearesetNeighbourDistance) {
-                        nearesetNeighbourDistance = neighbourVertex.distance;
-                        nearestNeighbour = neighbourVertex.value;
-                        // fromVertex = inMSTVertex;
+    public int[] shortestDistanceDijkstra(int sourceVertex) {
+        boolean[] isFinalized = new boolean[mTotalVertex];
+        int[] distance = new int[mTotalVertex];
+        ArrayList<Integer> vertexList = new ArrayList<Integer>();
+        for (int index = 0; index < mTotalVertex; ++index) {
+            distance[index] = Integer.MAX_VALUE;
+            vertexList.add(index);
+        }
+
+        // Assigning 0 as distance to itself
+        distance[sourceVertex] = 0;
+
+        int parentVertex = 0;
+        while (!vertexList.isEmpty()) {
+            parentVertex = minVertexDistance(distance, isFinalized);
+            vertexList.remove(new Integer(parentVertex));
+            isFinalized[parentVertex] = true;
+
+            Vertex neighbourVertex = null;
+            ArrayList<Vertex> neighbourList = mAdjacencyList.get(parentVertex);
+            for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                neighbourVertex = neighbourList.get(neighbourIndex);
+                if (!isFinalized[neighbourVertex.value]) {
+                    if (distance[neighbourVertex.value] > distance[parentVertex] + neighbourVertex.distance) {
+                        distance[neighbourVertex.value] = distance[parentVertex] + neighbourVertex.distance;
                     }
                 }
             }
-            totalWeight += nearesetNeighbourDistance;
-            // minSpanningTree.get(fromVertex).add(new Vertex(nearestNeighbour, nearesetNeighbourDistance));
-            // minSpanningTree.get(nearestNeighbour).add(new Vertex(fromVertex, nearesetNeighbourDistance));
-            isVisited[nearestNeighbour] = true;
-            inMSTList.add(nearestNeighbour);
-            outMSTList.remove(new Integer(nearestNeighbour)); // Because removing an element taken Object as argument
         }
-
-        return totalWeight;
+        return distance;
     }
 }
 
-class MST {
-    int spanningTree(int V, int E, ArrayList<ArrayList<Integer>> graph) {
-        Graph localGraph = new Graph(V);
-        for (int i = 0; i < V; i++) {
-            ArrayList<Integer> innerList = graph.get(i);
-            for (int j = 0; j < V; j++) {
-                int distance = innerList.get(j);
-                if (distance != Integer.MAX_VALUE) {
-                    localGraph.addEdge(i, j, distance);
+/*
+ * g: vector of vectors which represents the graph src: source vertex to start traversing graph with V: number of vertices
+ */
+class Solution {
+    static int[] dijkstra(ArrayList<ArrayList<Integer>> g, int src, int V) {
+        Graph graph = new Graph(V);
+        for (int row = 0; row < V; ++row) {
+            for (int column = 0; column < V; ++column) {
+                if (g.get(row).get(column) != 0) {
+                    graph.addEdge(row, column, g.get(row).get(column));
                 }
             }
         }
-        int totalWeight = localGraph.minSpanningTree(0);
-        return totalWeight;
+
+        return graph.shortestDistanceDijkstra(src);
     }
 }

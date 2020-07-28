@@ -396,6 +396,16 @@ public class Graph2Test {
     }
 
     private static void analyzeGraph16() {
+        // Adjacency List Representation
+        // -------------------------------
+        // [0] -> 1(2) -> 2(5) -> NULL
+        // [1] -> 0(2) -> 3(1) -> 4(9) -> NULL
+        // [2] -> 0(5) -> 5(3) -> 3(7) -> NULL
+        // [3] -> 1(1) -> 2(7) -> 4(4) -> 6(8) -> NULL
+        // [4] -> 1(9) -> 3(4) -> NULL
+        // [5] -> 2(3) -> 6(6) -> NULL
+        // [6] -> 3(8) -> 5(6) -> NULL
+
         int numberOfVertices = 7;
         Graph2 graph = new Graph2(numberOfVertices, Type.UNDIRECTED);
         graph.addEdge(0, 1, 2);
@@ -424,6 +434,40 @@ public class Graph2Test {
         System.out.println();
     }
 
+    private static void analyzeGraph17() {
+        // Adjacency List Representation
+        // -------------------------------
+        // [0] -> 1(4) -> 2(8) -> NULL
+        // [1] -> 0(4) -> 3(8) -> 2(11) -> NULL
+        // [2] -> 0(8) -> 1(11) -> 4(7) -> 5(1) -> NULL
+        // [3] -> 1(8) -> 4(2) -> 7(4) -> 6(7) -> NULL
+        // [4] -> 2(7) -> 3(2) -> 5(6) -> NULL
+        // [5] -> 2(1) -> 4(6) -> 7(2) -> NULL
+        // [6] -> 3(7) -> 7(14) -> 8(9) -> NULL
+        // [7] -> 3(4) -> 5(2) -> 6(14) -> 8(10) -> NULL
+        // [8] -> 6(9) -> 7(10) -> NULL
+
+        int numberOfVertices = 9;
+        Graph2 graph = new Graph2(numberOfVertices, Type.UNDIRECTED);
+        graph.addEdge(0, 1, 4);
+        graph.addEdge(0, 2, 8);
+        graph.addEdge(1, 3, 8);
+        graph.addEdge(1, 2, 11);
+        graph.addEdge(2, 4, 7);
+        graph.addEdge(2, 5, 1);
+        graph.addEdge(3, 4, 2);
+        graph.addEdge(3, 7, 4);
+        graph.addEdge(3, 6, 7);
+        graph.addEdge(4, 5, 6);
+        graph.addEdge(5, 7, 2);
+        graph.addEdge(6, 7, 14);
+        graph.addEdge(6, 8, 9);
+        graph.addEdge(7, 8, 10);
+
+        graph.display();
+        graph.shortestDistance(0, Algorithm.DIJKSTRA);
+    }
+
     public static void main(String[] args) {
         // analyzeGraph1();
         // analyzeGraph2();
@@ -440,6 +484,7 @@ public class Graph2Test {
         // analyzeGraph13();
         // analyzeGraph14();
         // analyzeGraph15();
-        analyzeGraph16();
+        // analyzeGraph16();
+        analyzeGraph17();
     }
 }

@@ -11,7 +11,7 @@ public class Graph2 {
     }
 
     enum Algorithm {
-        KAHN, DFS, BFS, TOPOLOGICAL
+        KAHN, DFS, BFS, TOPOLOGICAL, DIJKSTRA
     }
 
     class Vertex {
@@ -21,6 +21,18 @@ public class Graph2 {
         public Vertex(int value, int distance) {
             this.value = value;
             this.distance = distance;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Vertex))
+                return false;
+
+            Vertex vertex = (Vertex) obj;
+            if (vertex.value == this.value) {
+                return true;
+            }
+            return false;
         }
     }
 
@@ -424,13 +436,74 @@ public class Graph2 {
         return;
     }
 
-    public void shortestDistance(int sourceVertex, Algorithm mAlgorithm) {
+    private int minVertexDistance(int[] distance, boolean[] isFinalized) {
+        int minIndex = -1;
+        int min = Integer.MAX_VALUE;
+
+        for (int index = 0; index < mTotalVertex; ++index) {
+            if (!isFinalized[index]) {
+                if (min > distance[index]) {
+                    min = distance[index];
+                    minIndex = index;
+                }
+            }
+        }
+        return minIndex;
+    }
+
+    private void shortestDistanceUndirectedDijkstra(int sourceVertex) {
+        boolean[] isFinalized = new boolean[mTotalVertex];
+        int[] distance = new int[mTotalVertex];
+        ArrayList<Integer> vertexList = new ArrayList<Integer>();
+        for (int index = 0; index < mTotalVertex; ++index) {
+            distance[index] = Integer.MAX_VALUE;
+            vertexList.add(index);
+        }
+
+        // Assigning 0 as distance to itself
+        distance[sourceVertex] = 0;
+
+        int parentVertex = 0;
+        while (!vertexList.isEmpty()) {
+            parentVertex = minVertexDistance(distance, isFinalized);
+            vertexList.remove(new Integer(parentVertex));
+            isFinalized[parentVertex] = true;
+
+            Vertex neighbourVertex = null;
+            ArrayList<Vertex> neighbourList = mAdjacencyList.get(parentVertex);
+            for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                neighbourVertex = neighbourList.get(neighbourIndex);
+                if (!isFinalized[neighbourVertex.value]) {
+                    if (distance[neighbourVertex.value] > distance[parentVertex] + neighbourVertex.distance) {
+                        distance[neighbourVertex.value] = distance[parentVertex] + neighbourVertex.distance;
+                    }
+                }
+            }
+        }
+
+        System.out.println();
+        System.out.println("Shortest Distance from " + sourceVertex + " node");
+        System.out.println("------------------------------");
+        for (int index = 0; index < mTotalVertex; ++index) {
+            if (distance[index] == Integer.MAX_VALUE) {
+                System.out.println(index + ": INF");
+            } else {
+                System.out.println(index + ": " + distance[index]);
+            }
+        }
+    }
+
+    public void shortestDistance(int sourceVertex, Algorithm algorithm) {
         if (Type.UNDIRECTED == mType) {
-            shortestDistanceUndirectedBFS(sourceVertex);
+            if (Algorithm.BFS == algorithm) {
+                shortestDistanceUndirectedBFS(sourceVertex);
+            } else if (Algorithm.DIJKSTRA == algorithm) {
+                shortestDistanceUndirectedDijkstra(sourceVertex);
+            }
         } else if (Type.DIRECTED == mType) {
-            if (Algorithm.BFS == mAlgorithm) {
+            if (Algorithm.BFS == algorithm) {
                 shortestDistanceDirectedBFS(sourceVertex);
-            } else if (Algorithm.TOPOLOGICAL == mAlgorithm) {
+            } else if (Algorithm.TOPOLOGICAL == algorithm) {
                 // TBD
             }
         }
@@ -647,4 +720,5 @@ public class Graph2 {
 
         return minSpanningTree;
     }
+
 }
