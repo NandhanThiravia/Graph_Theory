@@ -2,10 +2,11 @@ package com.other.problems;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class MinSwapToSort {
-    class Item implements Comparable<Item> {
+    class Item {
         public int value;
         public int position;
 
@@ -13,26 +14,22 @@ public class MinSwapToSort {
             this.value = value;
             this.position = position;
         }
-
-        @Override
-        public int compareTo(Item item) {
-            if (this.value > item.value) {
-                return 1;
-            } else if (this.value < item.value) {
-                return -1;
-            }
-            return 0;
-        }
-
     }
 
     public int minSwaps(int[] array, int length) {
-        Item[] arrayItem = new Item[length];
+        ArrayList<Item> arrayItem = new ArrayList<Item>();
         for (int index = 0; index < length; ++index) {
-            arrayItem[index] = new Item(array[index], index);
+            arrayItem.add(new Item(array[index], index));
         }
 
-        Arrays.sort(arrayItem);
+        arrayItem.sort(new Comparator<Item>() {
+            @Override
+            public int compare(Item o1, Item o2) {
+                if (o1.value > o2.value)
+                    return 1;
+                return -1;
+            }
+        });
 
         int totalSwapCount = 0;
         int cycle = 0;
@@ -40,7 +37,7 @@ public class MinSwapToSort {
         boolean[] isVisited = new boolean[length];
 
         for (int index = 0; index < length; ++index) {
-            if (isVisited[index] || index == arrayItem[index].position) {
+            if (isVisited[index] || index == arrayItem.get(index).position) {
                 continue;
             }
 
@@ -48,7 +45,7 @@ public class MinSwapToSort {
             nextIndex = index;
             while (!isVisited[nextIndex]) {
                 isVisited[nextIndex] = true;
-                nextIndex = arrayItem[nextIndex].position;
+                nextIndex = arrayItem.get(nextIndex).position;
                 cycle += 1;
             }
 
