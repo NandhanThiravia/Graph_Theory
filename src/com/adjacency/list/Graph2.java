@@ -11,7 +11,7 @@ public class Graph2 {
     }
 
     enum Algorithm {
-        KAHN, DFS, BFS, TOPOLOGICAL, DIJKSTRA
+        KAHN, DFS, BFS, TOPOLOGICAL, DIJKSTRA, BELLMAN_FORD
     }
 
     class Vertex {
@@ -451,7 +451,7 @@ public class Graph2 {
         return minIndex;
     }
 
-    private void shortestDistanceUndirectedDijkstra(int sourceVertex) {
+    private void shortestDistanceDijkstra(int sourceVertex) {
         boolean[] isFinalized = new boolean[mTotalVertex];
         int[] distance = new int[mTotalVertex];
         ArrayList<Integer> vertexList = new ArrayList<Integer>();
@@ -493,18 +493,63 @@ public class Graph2 {
         }
     }
 
+    private void shortestDistanceDirectedBellmanFord(int sourceVertex) {
+        int[] distance = new int[mTotalVertex];
+        for (int index = 0; index < mTotalVertex; ++index) {
+            distance[index] = Integer.MAX_VALUE;
+        }
+        distance[sourceVertex] = 0;
+
+        for (int counter = 0; counter < (mTotalVertex - 1); ++counter) {
+            boolean isChanged = false;
+            // Traverse through all the edges
+            for (int vertex = 0; vertex < mTotalVertex; ++vertex) {
+                ArrayList<Vertex> neighbourList = mAdjacencyList.get(vertex);
+                for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                    Vertex neighbourVertex = neighbourList.get(neighbourIndex);
+
+                    // Addition of any value with INFINITY would be INFINITY, so skipping,
+                    // safeguarding the addition in next if condition
+                    if (distance[vertex] == Integer.MAX_VALUE)
+                        continue;
+
+                    if (distance[neighbourVertex.value] > distance[vertex] + neighbourVertex.distance) {
+                        distance[neighbourVertex.value] = distance[vertex] + neighbourVertex.distance;
+                        isChanged = true;
+                    }
+                }
+            }
+            if (!isChanged) {
+                break;
+            }
+        }
+
+        System.out.println();
+        System.out.println("Shortest Distance from " + sourceVertex + " node");
+        System.out.println("------------------------------");
+        for (int index = 0; index < mTotalVertex; ++index) {
+            if (distance[index] == Integer.MAX_VALUE) {
+                System.out.println(index + ": INF");
+            } else {
+                System.out.println(index + ": " + distance[index]);
+            }
+        }
+    }
+
     public void shortestDistance(int sourceVertex, Algorithm algorithm) {
         if (Type.UNDIRECTED == mType) {
             if (Algorithm.BFS == algorithm) {
                 shortestDistanceUndirectedBFS(sourceVertex);
             } else if (Algorithm.DIJKSTRA == algorithm) {
-                shortestDistanceUndirectedDijkstra(sourceVertex);
+                shortestDistanceDijkstra(sourceVertex);
             }
         } else if (Type.DIRECTED == mType) {
             if (Algorithm.BFS == algorithm) {
                 shortestDistanceDirectedBFS(sourceVertex);
-            } else if (Algorithm.TOPOLOGICAL == algorithm) {
-                // TBD
+            } else if (Algorithm.DIJKSTRA == algorithm) {
+                shortestDistanceDijkstra(sourceVertex);
+            } else if (Algorithm.BELLMAN_FORD == algorithm) {
+                shortestDistanceDirectedBellmanFord(sourceVertex);
             }
         }
     }

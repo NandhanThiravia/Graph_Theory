@@ -468,6 +468,30 @@ public class Graph2Test {
         graph.shortestDistance(0, Algorithm.DIJKSTRA);
     }
 
+    private static void analyzeGraph18() {
+        // Adjacency List Representation
+        // -------------------------------
+        // [0] -> 1(1) -> 2(4) -> NULL
+        // [1] -> 3(2) -> 2(-3) -> NULL
+        // [2] -> 3(3) -> NULL
+        // [3] -> NULL
+
+        int numberOfVertixes = 4;
+        Graph2 graph = new Graph2(numberOfVertixes, Type.DIRECTED);
+        graph.addEdge(0, 1, 1);
+        graph.addEdge(0, 2, 4);
+        graph.addEdge(1, 3, 2);
+        graph.addEdge(1, 2, -3);
+        graph.addEdge(2, 3, 3);
+
+        graph.display();
+
+        graph.shortestDistance(0, Algorithm.BELLMAN_FORD);
+        graph.shortestDistance(1, Algorithm.BELLMAN_FORD);
+        graph.shortestDistance(2, Algorithm.BELLMAN_FORD);
+        graph.shortestDistance(3, Algorithm.BELLMAN_FORD);
+    }
+
     public static void main(String[] args) {
         // analyzeGraph1();
         // analyzeGraph2();
@@ -485,6 +509,7 @@ public class Graph2Test {
         // analyzeGraph14();
         // analyzeGraph15();
         // analyzeGraph16();
-        analyzeGraph17();
+        // analyzeGraph17();
+        analyzeGraph18();
     }
 }

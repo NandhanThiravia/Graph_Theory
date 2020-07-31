@@ -16,8 +16,8 @@ Graph2 Class: It is based on built-in ArrayList Class. Looks simpler than Graph 
 10. Find Level of a Given Node. [Graph2.displayLevel]
 11. Find number of paths between 2 nodes [Graph2.countOfPath]
 12. Minimum Spanning Tree - Prims Algorithm. [Graph2.minSpanningTree]
-13. Dijkstra's Algorithm to find Shortest Distance. [Graph2.shortestDistanceUndirectedDijkstra]
-
+13. Dijkstra's Algorithm to find Shortest Distance. [Graph2.shortestDistanceDijkstra]
+14. Bellman-Ford Algorithm to find Shortest Distance. [Graph2.shortestDistanceDirectedBellmanFord]
 
 
 Other Puzzle Problems based on Graph:
