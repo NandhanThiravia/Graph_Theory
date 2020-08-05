@@ -31,3 +31,4 @@ Other Puzzle Problems based on Graph:
 8. Algorithm to find the Time taken for the Fresh Oranges to Rot. [RottenOranges]
 9. Algorithm to find the Minimum number of swaps required to sort the Array. [MinSwapToSort]
 10. Algorithm to find shortest path for a Knight to reach Target in a Chess Board. [KnightProblem]
+11. Algorithm to find the shortest path between source and destination in a 2D Array. [ShortestPathArray]
