@@ -492,6 +492,70 @@ public class Graph2Test {
         graph.shortestDistance(3, Algorithm.BELLMAN_FORD);
     }
 
+    private static void analyzeGraph19() {
+        // Adjacency List Representation
+        // -------------------------------
+        // [0] -> 1(1) -> NULL
+        // [1] -> 2(1) -> 3(1) -> NULL
+        // [2] -> 0(1) -> NULL
+        // [3] -> 4(1) -> NULL
+        // [4] -> NULL
+
+        int numberOfVertices = 5;
+        Graph2 graph = new Graph2(numberOfVertices, Type.DIRECTED);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 0);
+        graph.addEdge(1, 3);
+        graph.addEdge(3, 4);
+
+        graph.display();
+        graph.getConnectedComponents(Algorithm.KOSARAJU);
+    }
+
+    private static void analyzeGraph20() {
+        // Adjacency List Representation
+        // -------------------------------
+        // [0] -> 1(1) -> NULL
+        // [1] -> 2(1) -> NULL
+        // [2] -> 3(1) -> NULL
+        // [3] -> 0(1) -> 4(1) -> NULL
+        // [4] -> 5(1) -> NULL
+        // [5] -> 4(1) -> NULL
+
+        int numberOfVertices = 6;
+        Graph2 graph = new Graph2(numberOfVertices, Type.DIRECTED);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 3);
+        graph.addEdge(3, 0);
+        graph.addEdge(3, 4);
+        graph.addEdge(4, 5);
+        graph.addEdge(5, 4);
+
+        graph.display();
+        graph.getConnectedComponents(Algorithm.KOSARAJU);
+    }
+
+    private static void analyzeGraph21() {
+        // Adjacency List Representation
+        // -------------------------------
+        // [0] -> 1(1) -> NULL
+        // [1] -> 3(1) -> 2(1) -> NULL
+        // [2] -> NULL
+        // [3] -> 0(1) -> NULL
+
+        int numberOfVertices = 4;
+        Graph2 graph = new Graph2(numberOfVertices, Type.DIRECTED);
+        graph.addEdge(0, 1);
+        graph.addEdge(1, 3);
+        graph.addEdge(3, 0);
+        graph.addEdge(1, 2);
+
+        graph.display();
+        graph.getConnectedComponents(Algorithm.KOSARAJU);
+    }
+
     public static void main(String[] args) {
         // analyzeGraph1();
         // analyzeGraph2();
@@ -510,6 +574,9 @@ public class Graph2Test {
         // analyzeGraph15();
         // analyzeGraph16();
         // analyzeGraph17();
-        analyzeGraph18();
+        // analyzeGraph18();
+        // analyzeGraph19();
+        // analyzeGraph20();
+        analyzeGraph21();
     }
 }

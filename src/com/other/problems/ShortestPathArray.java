@@ -1,6 +1,5 @@
 package com.other.problems;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
@@ -37,9 +36,6 @@ public class ShortestPathArray {
         int cols = size;
 
         Node source = new Node(0, 0, grid[0][0]);
-
-        ArrayList<Node> minCostPathList = new ArrayList<Node>();
-        minCostPathList.add(source);
 
         PriorityQueue<Node> priorityQueue = new PriorityQueue<Node>(new Comparator<Node>() {
             @Override

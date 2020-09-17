@@ -11,7 +11,7 @@ public class Graph2 {
     }
 
     enum Algorithm {
-        KAHN, DFS, BFS, TOPOLOGICAL, DIJKSTRA, BELLMAN_FORD
+        KAHN, DFS, BFS, TOPOLOGICAL, DIJKSTRA, BELLMAN_FORD, KOSARAJU
     }
 
     class Vertex {
@@ -234,10 +234,14 @@ public class Graph2 {
         return -1;
     }
 
+    private int[] topologicalSortKosaraju() {
+        return topologicalSortDFS();
+    }
+
     /**
      * Displays the Topological Sort of a Directed Graph But it fails to work, if there is a Cycle in the Graph
      */
-    private void topologicalSortDFS() {
+    private int[] topologicalSortDFS() {
         boolean isVisited[] = new boolean[mTotalVertex];
         Stack<Integer> output = new Stack<Integer>();
         Stack<Integer> stack = new Stack<Integer>();
@@ -262,13 +266,20 @@ public class Graph2 {
 
         System.out.println("Topological Sort");
         System.out.println("-----------------");
+        int[] outputList = new int[mTotalVertex];
+
+        int index = 0;
         while (!output.isEmpty()) {
-            System.out.println(output.pop());
+            int vertex = output.pop();
+            System.out.println(vertex);
+            outputList[index] = vertex;
+            ++index;
         }
         System.out.println();
+        return outputList;
     }
 
-    private void topologicalSortKahn() {
+    private int[] topologicalSortKahn() {
         boolean isVisited[] = new boolean[mTotalVertex];
         int inDegree[] = new int[mTotalVertex];
 
@@ -314,7 +325,7 @@ public class Graph2 {
 
         if (isCyclic) {
             System.err.println("The Graph is Cyclic, so sort cannot be performed");
-            return;
+            return null;
         }
 
         System.out.println("Topological Sort");
@@ -322,6 +333,7 @@ public class Graph2 {
         for (int index = 0; index < output.length; ++index) {
             System.out.println(output[index]);
         }
+        return output;
     }
 
     /**
@@ -329,20 +341,24 @@ public class Graph2 {
      * 
      * @param mAlgorithm
      */
-    public void topologicalSort(Algorithm mAlgorithm) {
+    public int[] topologicalSort(Algorithm mAlgorithm) {
+        int[] output = null;
         if (Type.DIRECTED == mType) {
             if (Algorithm.DFS == mAlgorithm) {
                 if (!isCyclic(Algorithm.KAHN)) {
-                    topologicalSortDFS();
+                    output = topologicalSortDFS();
                 } else {
                     System.out.println("Topological Sort cannot be performed, because the Graph is Cyclic");
                 }
             } else if (Algorithm.KAHN == mAlgorithm) {
-                topologicalSortKahn();
+                output = topologicalSortKahn();
+            } else if (Algorithm.KOSARAJU == mAlgorithm) {
+                output = topologicalSortKosaraju();
             }
         } else {
             System.err.println("Topological Sort is only for Directed Graphs");
         }
+        return output;
     }
 
     /**
@@ -764,6 +780,70 @@ public class Graph2 {
         }
 
         return minSpanningTree;
+    }
+
+    public ArrayList<ArrayList<Integer>> getConnectedComponents(Algorithm algorithm) {
+        if (algorithm == Algorithm.KOSARAJU) {
+            return getConnectedComponentsKosaraju();
+        }
+        return null;
+    }
+
+    private ArrayList<ArrayList<Integer>> getConnectedComponentsKosaraju() {
+        // Step 1
+        // Topological Sorting
+        int[] output = topologicalSort(Algorithm.KOSARAJU);
+
+        // Step 2
+        // Transpose of the Graph
+        int numberOfVertices = mTotalVertex;
+        Graph2 graph = new Graph2(numberOfVertices, Type.DIRECTED);
+        for (int index = 0; index < mTotalVertex; index++) {
+            ArrayList<Vertex> neighbourList = mAdjacencyList.get(index);
+            for (int neighbourIndex = 0; neighbourIndex < neighbourList.size(); ++neighbourIndex) {
+                graph.addEdge(neighbourList.get(neighbourIndex).value, index);
+            }
+        }
+        graph.display();
+
+        // Step 3
+        // Depth or Breadth First Traversal
+        boolean isVisited[] = new boolean[mTotalVertex];
+        Stack<Integer> stack = new Stack<Integer>();
+        ArrayList<ArrayList<Integer>> connectedComponents = new ArrayList<ArrayList<Integer>>();
+        for (int index = 0; index < mTotalVertex; ++index) {
+            if (!isVisited[index]) {
+                ArrayList<Integer> subComponents = new ArrayList<Integer>();
+                isVisited[index] = true;
+                stack.add(index);
+
+                while (!stack.isEmpty()) {
+                    int vertex = stack.pop();
+                    subComponents.add(vertex);
+
+                    ArrayList<Vertex> innerList = graph.mAdjacencyList.get(vertex);
+                    for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                        if (!isVisited[innerList.get(innerIndex).value]) {
+                            isVisited[innerList.get(innerIndex).value] = true;
+                            stack.add(innerList.get(innerIndex).value);
+                        }
+                    }
+                }
+                connectedComponents.add(subComponents);
+            }
+        }
+
+        System.out.println("Number of Components: " + connectedComponents.size());
+        System.out.println();
+        for (int index = 0; index < connectedComponents.size(); ++index) {
+            ArrayList<Integer> innerList = connectedComponents.get(index);
+            System.out.println("Component " + (index + 1) + ":");
+            for (int innerIndex = 0; innerIndex < innerList.size(); ++innerIndex) {
+                System.out.println(innerList.get(innerIndex));
+            }
+            System.out.println();
+        }
+        return connectedComponents;
     }
 
 }
