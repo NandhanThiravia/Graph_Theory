@@ -517,7 +517,6 @@ public class Graph2 {
         distance[sourceVertex] = 0;
 
         for (int counter = 0; counter < (mTotalVertex - 1); ++counter) {
-            boolean isChanged = false;
             // Traverse through all the edges
             for (int vertex = 0; vertex < mTotalVertex; ++vertex) {
                 ArrayList<Vertex> neighbourList = mAdjacencyList.get(vertex);
@@ -531,12 +530,8 @@ public class Graph2 {
 
                     if (distance[neighbourVertex.value] > distance[vertex] + neighbourVertex.distance) {
                         distance[neighbourVertex.value] = distance[vertex] + neighbourVertex.distance;
-                        isChanged = true;
                     }
                 }
-            }
-            if (!isChanged) {
-                break;
             }
         }
 
